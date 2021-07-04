@@ -1,0 +1,16 @@
+{
+  "name": "com.deusald.deusaldunitytools",
+  "version": "1.0.0",
+  "displayName": "Deusald Unity Tools",
+  "description": "Deusald Unity Tools unity package.",
+  "documentationUrl": "https://github.com/Deusald/DeusaldUnityTools",
+  "changelogUrl": "https://github.com/Deusald/DeusaldUnityTools",
+  "licensesUrl": "https://github.com/Deusald/DeusaldUnityTools",
+  "keywords": [],
+  "author": {
+    "name": "Adam Deusald Orli\u0144ski",
+    "email": "deusald@gmail.com",
+    "url": "https://www.deusald.com"
+  },
+  "type": "tool"
+}
