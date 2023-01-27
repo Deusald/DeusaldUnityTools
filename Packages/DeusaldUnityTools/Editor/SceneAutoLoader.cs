@@ -82,6 +82,16 @@ namespace DeusaldUnityTools
 
         #endregion Init Methods
 
+        #region Public Methods
+
+        public static void SetManually(string relativeMasterScenePath, bool loadMasterOnPlay = true)
+        {
+            MasterScene      = relativeMasterScenePath;
+            LoadMasterOnPlay = loadMasterOnPlay;
+        }
+
+        #endregion Public Methods
+        
         #region Private Methods
 
         // Menu items to select the "master" scene and control whether or not to load it.
