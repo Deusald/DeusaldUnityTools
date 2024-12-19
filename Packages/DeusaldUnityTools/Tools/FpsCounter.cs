@@ -28,23 +28,13 @@ namespace DeusaldUnityTools
 {
     public class FpsCounter : MonoBehaviour
     {
-        #region Variables
-
-        [SerializeField] private int _Samples = 3;
-
-        private int _Index;
-
-        private readonly List<float> _Timing = new List<float>();
-
-        #endregion Variables
-
         #region Properties
 
         public float FPS
         {
             get
             {
-                var result = 0.0f;
+                float result = 0.0f;
                 for (int i = 0; i < _Samples; ++i)
                 {
                     result += _Timing[i];
@@ -58,7 +48,7 @@ namespace DeusaldUnityTools
         {
             get
             {
-                var result = 0.0f;
+                float result = 0.0f;
                 for (int i = 0; i < _Samples; ++i)
                 {
                     result += _Timing[i];
@@ -69,15 +59,22 @@ namespace DeusaldUnityTools
         }
 
         #endregion Properties
+        
+        #region Variables
+
+        [SerializeField] private int _Samples = 3;
+
+        private int _Index;
+
+        private readonly List<float> _Timing = new();
+
+        #endregion Variables
 
         #region Special Methods
 
         private void Awake()
         {
-            for (int i = 0; i < _Samples; ++i)
-            {
-                _Timing.Add(0.0f);
-            }
+            for (int i = 0; i < _Samples; ++i) _Timing.Add(0.0f);
         }
 
         private void Update()

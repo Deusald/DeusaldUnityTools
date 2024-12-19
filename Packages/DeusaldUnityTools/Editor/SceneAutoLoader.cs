@@ -43,9 +43,9 @@ namespace DeusaldUnityTools
         #region Variables
 
         // Properties are remembered as editor preferences.
-        private const string _EditorPrefLoadMasterOnPlay = "SceneAutoLoader.LoadMasterOnPlay";
-        private const string _EditorPrefMasterScene      = "SceneAutoLoader.MasterScene";
-        private const string _EditorPrefPreviousScene    = "SceneAutoLoader.PreviousScene";
+        private const string _EDITOR_PREF_LOAD_MASTER_ON_PLAY = "SceneAutoLoader.LoadMasterOnPlay";
+        private const string _EDITOR_PREF_MASTER_SCENE        = "SceneAutoLoader.MasterScene";
+        private const string _EDITOR_PREF_PREVIOUS_SCENE      = "SceneAutoLoader.PreviousScene";
 
         #endregion Variables
 
@@ -53,24 +53,24 @@ namespace DeusaldUnityTools
 
         private static bool LoadMasterOnPlay
         {
-            get => EditorPrefs.GetBool(_EditorPrefLoadMasterOnPlay, false);
-            set => EditorPrefs.SetBool(_EditorPrefLoadMasterOnPlay, value);
+            get => EditorPrefs.GetBool(_EDITOR_PREF_LOAD_MASTER_ON_PLAY, false);
+            set => EditorPrefs.SetBool(_EDITOR_PREF_LOAD_MASTER_ON_PLAY, value);
         }
 
         private static string MasterScene
         {
-            get => EditorPrefs.GetString(_EditorPrefMasterScene, "Master.unity");
-            set => EditorPrefs.SetString(_EditorPrefMasterScene, value);
+            get => EditorPrefs.GetString(_EDITOR_PREF_MASTER_SCENE, "Master.unity");
+            set => EditorPrefs.SetString(_EDITOR_PREF_MASTER_SCENE, value);
         }
 
         private static string PreviousScene
         {
-            get => EditorPrefs.GetString(_EditorPrefPreviousScene, SceneManager.GetActiveScene().path);
-            set => EditorPrefs.SetString(_EditorPrefPreviousScene, value);
+            get => EditorPrefs.GetString(_EDITOR_PREF_PREVIOUS_SCENE, SceneManager.GetActiveScene().path);
+            set => EditorPrefs.SetString(_EDITOR_PREF_PREVIOUS_SCENE, value);
         }
 
         #endregion Properties
-        
+
         #region Init Methods
 
         // Static constructor binds a playmode-changed callback.
@@ -91,10 +91,10 @@ namespace DeusaldUnityTools
         }
 
         #endregion Public Methods
-        
+
         #region Private Methods
 
-        // Menu items to select the "master" scene and control whether or not to load it.
+        // Menu items to select the "master" scene and control whether to load it.
         [MenuItem("Tools/Scene Autoload/Select Master Scene...")]
         private static void SelectMasterScene()
         {
