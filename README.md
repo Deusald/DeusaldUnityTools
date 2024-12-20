@@ -17,6 +17,7 @@ You can add this library to Unity project in 2 ways:
 * Scene Autoloader
 * Fps Counter
 * Object Pool System
+* Text Warp
 
 ## Editor Tools
 
@@ -24,3 +25,9 @@ You can add this library to Unity project in 2 ways:
 With this tool you can mark one scene as a master scene that will always load on play to start game from it.
 
 ![scene-autoloader-screenshot](images/scene-autoloader.png)
+
+## Extensions
+
+### Text Warp
+Text Mesh Pro extension method that lets you warp text.
+![text-warp-screenshot](images/text-warp.png)

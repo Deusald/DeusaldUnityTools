@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.deusald.deusaldunitytools": {
-      "version": "file:DeusaldUnityTools",
+      "version": "file:com.deusald.deusaldunitytools",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}

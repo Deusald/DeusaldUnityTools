@@ -1,6 +1,6 @@
 {
     "name": "DeusaldUnityToolsEditor",
-    "rootNamespace": "",
+    "rootNamespace": "DeusaldUnityTools",
     "references": [],
     "includePlatforms": [
         "Editor"
