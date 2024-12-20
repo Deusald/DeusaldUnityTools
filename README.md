@@ -18,6 +18,8 @@ You can add this library to Unity project in 2 ways:
 * Fps Counter
 * Object Pool System
 * Text Warp
+* Extension method to copy string into clipboard
+* Some useful unity extension methods
 
 ## Editor Tools
 
