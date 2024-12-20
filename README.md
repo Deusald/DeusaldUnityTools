@@ -1,4 +1,26 @@
 # DeusaldUnityTools
-Basic tools used in many Unity projects.
 
-To add package into unity package manager add git repository: https://github.com/Deusald/DeusaldUnityTools.git?path=/Packages/DeusaldUnityTools#vX.X.X
+Deusald Unity Tools are set of useful modules, classes, extensions and methods.
+
+### Unity Install
+
+You can add this library to Unity project in 2 ways:
+
+**Warning: Plugin require [Odin inspector](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041) installed in project.**
+
+1. In package manager add library as git repository using format:
+   `https://github.com/Deusald/DeusaldUnityTools.git?path=/Packages/DeusaldUnityTools#vX.X.X`
+2. Add package using Scoped Register: todo
+
+## Features
+
+* Scene Autoloader
+* Fps Counter
+* Object Pool System
+
+## Editor Tools
+
+### Scene Autoloader
+With this tool you can mark one scene as a master scene that will always load on play to start game from it.
+
+![scene-autoloader-screenshot](images/scene-autoloader.png)
