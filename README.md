@@ -20,6 +20,7 @@ You can add this library to Unity project in 2 ways:
 * Text Warp
 * Extension method to copy string into clipboard
 * Some useful unity extension methods
+* Secure Player Prefs
 
 ## Editor Tools
 
@@ -33,3 +34,15 @@ With this tool you can mark one scene as a master scene that will always load on
 ### Text Warp
 Text Mesh Pro extension method that lets you warp text.
 ![text-warp-screenshot](images/text-warp.png)
+
+## Secure Player Prefs
+Secure Player Prefs is a module that lets you encrypt player prefs so it can't be modified or read by players.
+
+```csharp
+SecurePlayerPrefs.Password = "password";
+await SecurePlayerPrefs.SymmetricEncryptAsync(secretData);
+string decryptedSecretData = await SecurePlayerPrefs.SymmetricDecryptAsync(encryptedSecretData);
+await SecurePlayerPrefs.SetStringAsync(key, value);
+await SecurePlayerPrefs.GetIntAsync(key);
+// etc.
+```
