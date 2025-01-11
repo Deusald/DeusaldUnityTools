@@ -9,8 +9,8 @@ You can add this library to Unity project in 2 ways:
 **Warning: Plugin require [Odin inspector](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041) installed in project.**
 
 1. In package manager add library as git repository using format:
-   `https://github.com/Deusald/DeusaldUnityTools.git?path=/Packages/DeusaldUnityTools#vX.X.X`
-2. Add package using Scoped Register: todo
+   `https://github.com/Deusald/DeusaldUnityTools.git?path=/Packages/com.deusald.deusaldunitytools#vX.X.X`
+2. Add package using Scoped Register: https://openupm.com/packages/com.deusald.deusaldunitytools/
 
 ## Features
 
