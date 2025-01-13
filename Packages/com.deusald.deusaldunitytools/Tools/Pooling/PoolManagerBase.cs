@@ -22,7 +22,6 @@
 // SOFTWARE.
 
 using System.Collections.Generic;
-using Sirenix.Utilities;
 using UnityEngine;
 
 namespace DeusaldUnityTools
@@ -97,7 +96,10 @@ namespace DeusaldUnityTools
         {
             foreach (Queue<Component> pool in _Pools.Values)
             {
-                pool.ForEach(o => Destroy(o.gameObject));
+                foreach (Component component in pool)
+                {
+                    Destroy(component.gameObject);
+                }
             }
 
             _Pools.Clear();
