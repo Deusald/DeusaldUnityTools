@@ -30,5 +30,6 @@ namespace DeusaldUnityTools
     public interface ITweenEngine
     {
         public void RunTween(Tween tween);
+        public void RunSequence(TweenSequence sequence);
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace DeusaldUnityTools
 {
@@ -108,6 +110,18 @@ namespace DeusaldUnityTools
             IsDecommissioned = true;
             foreach (Tween tween in _WaitingForTweens) tween.Cancel();
             foreach (Tween tween in _AllInsertedTweens) tween.Cancel();
+        }
+        
+        /// <summary>The cancel method will cancel the Tween. When the Tween is canceled, the OnCancel and OnFinally delegates will be invoked.</summary>
+        public IEnumerator AwaitDecommission()
+        {
+            while (!IsDecommissioned) yield return null;
+        }
+
+        /// <summary>The await decommission async method will return an awaitable that will await the decommission of the Tween. This can be used in async methods to wait for the Tween to finish or be canceled.</summary>
+        public async Awaitable AwaitDecommissionAsync()
+        {
+            while (!IsDecommissioned) await Awaitable.EndOfFrameAsync();
         }
     }
 }
