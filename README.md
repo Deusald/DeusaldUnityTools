@@ -115,3 +115,16 @@ public async Task LoginAsync()
     GameCenterAuth authResult = await _SignatureTask.Task;
 }
 ```
+
+## Tweens System
+An extremely light weight, extendable and customisable tweening engine made for strictly typed script-based animations for user-interfaces and world-space objects optimised for all platforms.
+
+Tweens module based on unity-tweens by Jeffrey Lanters - https://github.com/jeffreylanters/unity-tweens
+
+```csharp
+Tween positionTween = new PositionTween().AddOnEndCallback(_ => Debug.Log("Finished")).SetTarget(_Target, Vector3.zero, Vector3.one).SetDuration(3f).SetEase(EaseType.BounceInOut);
+_TweenEngine.RunTween(positionTween);
+
+TweenSequence sequence = new TweenSequence().AppendInterval(2f).Append(_Target.TweenPositionX(0f, 3f).SetDuration(3f)).AppendInterval(2f).AppendCallback(() => Debug.Log("Finished Sequence"));
+_TweenEngine.RunSequence(sequence);
+```
