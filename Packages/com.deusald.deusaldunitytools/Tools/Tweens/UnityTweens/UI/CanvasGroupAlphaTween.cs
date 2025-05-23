@@ -51,12 +51,12 @@ namespace DeusaldUnityTools
     
     public static partial class TweenExtensions
     {
-        public static Tween<CanvasGroup, float> TweenGraphicAlpha(this CanvasGroup canvasGroup, float from, float to)
+        public static Tween<CanvasGroup, float> TweenAlpha(this CanvasGroup canvasGroup, float from, float to)
         {
             return new CanvasGroupAlphaTween().SetTarget(canvasGroup, from, to);
         }
 
-        public static Tween<CanvasGroup, float> TweenGraphicAlpha(this CanvasGroup canvasGroup, float to)
+        public static Tween<CanvasGroup, float> TweenAlpha(this CanvasGroup canvasGroup, float to)
         {
             return new CanvasGroupAlphaTween().SetTarget(canvasGroup, to);
         }
