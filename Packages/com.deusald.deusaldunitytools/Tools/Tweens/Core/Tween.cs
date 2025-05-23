@@ -154,7 +154,7 @@ namespace DeusaldUnityTools
 
             OnAdd?.Invoke(this);
 
-            if (!(_HaltTime > 0) || FillMode is not (FillMode.Both or FillMode.Forwards)) return;
+            if (FillMode is not (FillMode.Both or FillMode.Forwards)) return;
             ApplyToComponent(_From);
             OnUpdate?.Invoke(this, _From);
         }
