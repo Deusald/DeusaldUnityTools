@@ -29,10 +29,11 @@ namespace DeusaldUnityTools
             {
                 foreach (Tween targetTween in pairs.Value)
                 {
+                    _AllInsertedTweens.Add(targetTween);
+                    targetTween.IsPaused = true;
                     _AllInsertedTweens.Add(new FloatTween().SetDuration(pairs.Key).AddOnEndCallback(_ =>
                     {
-                        _AllInsertedTweens.Add(targetTween);
-                        TweenEngine.RunTween(targetTween);
+                        targetTween.IsPaused = false;
                     }));
                 }
             }
@@ -44,13 +45,15 @@ namespace DeusaldUnityTools
         {
             if (IsDecommissioned) return;
             if (_WaitingForTweens.Count != 0 && _WaitingForTweens.Any(t => !t.IsDecommissioned)) return;
-            ++_CurrentTweenLevel;
-            if (_Tweens.Count <= _CurrentTweenLevel)
+            
+            if (_Tweens.Count <= _CurrentTweenLevel + 1)
             {
+                if (_AllInsertedTweens.Any(t => !t.IsDecommissioned)) return;
                 IsDecommissioned = true;
                 return;
             }
 
+            ++_CurrentTweenLevel;
             _WaitingForTweens.Clear();
             
             foreach (Tween tween in _Tweens[_CurrentTweenLevel])
