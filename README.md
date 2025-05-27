@@ -128,3 +128,37 @@ _TweenEngine.RunTween(positionTween);
 TweenSequence sequence = new TweenSequence().AppendInterval(2f).Append(_Target.TweenPositionX(0f, 3f).SetDuration(3f)).AppendInterval(2f).AppendCallback(() => Debug.Log("Finished Sequence"));
 _TweenEngine.RunSequence(sequence);
 ```
+
+## Android Tools
+Set of methods that could be useful on Android devices:
+
+### GetKeyboardHeight()
+Use to get keyboard height to place elements above the keyboard. Includes decorative elements like suggestions, emojis, etc.
+```csharp
+float rate = referenceCanvasHeight / Screen.height;
+positionY = AndroidAppLauncher.GetKeyboardHeight() * rate + margin
+```
+
+### LaunchOrOpenPlayStore(string packageName)
+Opens app and if that app is not installed, then opens a Play Store page for a specific app, with fallback to browser if Play Store isn't available.
+To be able to use this method, you need to specify which apps will be checked using this method in an Android manifest file:
+```
+<queries>
+    <package android:name="com.google.android.play.games" />
+</queries>
+```
+
+### TryOpenPlayStorePage(string packageName)
+Opens a Play Store page for a specific app, with fallback to browser if Play Store isn't available.
+
+### OpenAppSettings()
+Opens app settings.
+
+## iOS Tools
+Set of methods that could be useful on iOS devices:
+
+### OpenAppStore(string appId)
+Opens the App Store page for the specified App ID. AppId -> The app’s numeric Apple ID (not the bundle ID).
+
+### OpenAppSettings()
+Opens the iOS settings screen from the app.

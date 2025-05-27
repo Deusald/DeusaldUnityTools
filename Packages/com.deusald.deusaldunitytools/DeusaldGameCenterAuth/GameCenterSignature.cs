@@ -21,7 +21,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#if (UNITY_IOS && !UNITY_EDITOR)
 using System.Runtime.InteropServices;
+#endif
 
 namespace DeusaldGameCenterAuth
 {
@@ -43,14 +45,14 @@ namespace DeusaldGameCenterAuth
             string reason
         );
 
-        #if (UNITY_IOS || UNITY_EDITOR)
+        #if (UNITY_IOS && !UNITY_EDITOR)
         [DllImport("__Internal")]    
         private static extern void GenerateIdentityVerificationSignature(OnSucceeded onSucceeded, OnFailed onFailed); 
         #endif
 
         public static void Generate(OnSucceeded onSucceeded, OnFailed onFailed)
         {
-            #if (UNITY_IOS || UNITY_EDITOR)
+            #if (UNITY_IOS && !UNITY_EDITOR)
             GenerateIdentityVerificationSignature(onSucceeded, onFailed);
             #else
             onFailed.Invoke("GameCenter authentication is only available for iOS");

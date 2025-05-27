@@ -35,7 +35,7 @@ namespace DeusaldUnityTools
     {
         protected override float CurrentFromComponent()
         {
-            return Component!.shadowAngle;
+            return Component!.spotAngle;
         }
 
         protected override float Lerp(float from, float to, float time)
@@ -45,7 +45,7 @@ namespace DeusaldUnityTools
 
         protected override void ApplyToComponent(float value)
         {
-            Component!.shadowAngle = value;
+            Component!.spotAngle = value;
         }
     }
 
