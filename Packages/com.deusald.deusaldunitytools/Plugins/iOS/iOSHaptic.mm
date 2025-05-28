@@ -78,42 +78,37 @@ extern "C"
     {
         switch (type) 
         {
-            case 1: // Vibrate
+            case 1: // Light
             {
                 AudioServicesPlaySystemSound(1519);
                 break;
             }
-            case 2: // Light
+            case 2: // Medium
             {
                 AudioServicesPlaySystemSound(1519);
                 break;
             }
-            case 3: // Medium
-            {
-                AudioServicesPlaySystemSound(1519);
-                break;
-            }
-            case 4: // Heavy
+            case 3: // Heavy
             {
                 AudioServicesPlaySystemSound(1520);
                 break;
             }
-            case 5: // Selection
+            case 4: // Selection
             {
                 AudioServicesPlaySystemSound(1519);
                 break;
             }
-            case 6: // Success
+            case 5: // Success
             {
                 AudioServicesPlaySystemSound(1521);
                 break;
             }
-            case 7: // Warning
+            case 6: // Warning
             {
                 AudioServicesPlaySystemSound(1521);
                 break;
             }
-            case 8: // Error
+            case 7: // Error
             {
                 AudioServicesPlaySystemSound(1521);
                 break;
@@ -128,53 +123,46 @@ extern "C"
     {
         switch (type) 
         {
-            case 1: // Vibrate
-            {
-                UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
-                [generator impactOccurred];
-                [generator prepare];
-                break;
-            }
-            case 2: // Light
+            case 1: // Light
             {
                 UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleLight];
                 [generator impactOccurred];
                 [generator prepare];
                 break;
             }
-            case 3: // Medium
+            case 2: // Medium
             {
                 UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
                 [generator impactOccurred];
                 [generator prepare];
                 break;
             }
-            case 4: // Heavy
+            case 3: // Heavy
             {
                 UIImpactFeedbackGenerator *generator = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleHeavy];
                 [generator impactOccurred];
                 [generator prepare];
                 break;
             }
-            case 5: // Selection
+            case 4: // Selection
             {
                 UISelectionFeedbackGenerator *generator = [[UISelectionFeedbackGenerator alloc] init];
                 [generator selectionChanged];
                 break;
             }
-            case 6: // Success
+            case 5: // Success
             {
                 UINotificationFeedbackGenerator *generator = [[UINotificationFeedbackGenerator alloc] init];
                 [generator notificationOccurred:UINotificationFeedbackTypeSuccess];
                 break;
             }
-            case 7: // Warning
+            case 6: // Warning
             {
                 UINotificationFeedbackGenerator *generator = [[UINotificationFeedbackGenerator alloc] init];
                 [generator notificationOccurred:UINotificationFeedbackTypeWarning];
                 break;
             }
-            case 8: // Error
+            case 7: // Error
             {
                 UINotificationFeedbackGenerator *generator = [[UINotificationFeedbackGenerator alloc] init];
                 [generator notificationOccurred:UINotificationFeedbackTypeError];

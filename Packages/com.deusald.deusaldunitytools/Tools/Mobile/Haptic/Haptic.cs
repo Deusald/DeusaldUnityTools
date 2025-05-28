@@ -84,7 +84,6 @@ namespace DeusaldUnityTools
 
         private static readonly Dictionary<HapticType, long[]> _Patterns = new()
         {
-            { HapticType.Vibrate, new[] { _MEDIUM_DURATION } },
             { HapticType.Light, new[] { _LIGHT_DURATION } },
             { HapticType.Medium, new[] { _MEDIUM_DURATION } },
             { HapticType.Heavy, new[] { _HEAVY_DURATION } },
@@ -96,7 +95,6 @@ namespace DeusaldUnityTools
 
         private static readonly Dictionary<HapticType, int[]> _Amplitudes = new()
         {
-            { HapticType.Vibrate, Array.Empty<int>() },
             { HapticType.Light, new[] { _LIGHT_AMPLITUDE } },
             { HapticType.Medium, new[] { _MEDIUM_AMPLITUDE } },
             { HapticType.Heavy, new[] { _HEAVY_AMPLITUDE } },
@@ -119,8 +117,7 @@ namespace DeusaldUnityTools
             if (type != HapticType.Default && _SupportedHapticType == SupportedHapticType.Base) _AndroidVibrator?.Call("vibrate", _Patterns[type]);
             else if (type != HapticType.Default && _SupportedHapticType == SupportedHapticType.Advanced)
             {
-                if (_Amplitudes[type].Length == 0) _AndroidVibrator?.Call("vibrate", _Patterns[type]);
-                else if (_Patterns[type].Length == 1)
+                if (_Patterns[type].Length == 1)
                 {
                     AndroidJavaObject effect = _VibrationEffectClass.CallStatic<AndroidJavaObject>("createOneShot", _Patterns[type][0], _Amplitudes[type][0]);
                     _AndroidVibrator?.Call("vibrate", effect);

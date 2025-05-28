@@ -26,13 +26,12 @@ namespace DeusaldUnityTools
     public enum HapticType
     {
         Default   = 0,
-        Vibrate   = 1,
-        Light     = 2,
-        Medium    = 3,
-        Heavy     = 4,
-        Selection = 5,
-        Success   = 6,
-        Warning   = 7,
-        Error     = 8
+        Light     = 1,
+        Medium    = 2,
+        Heavy     = 3,
+        Selection = 4,
+        Success   = 5,
+        Warning   = 6,
+        Error     = 7
     }
 }
