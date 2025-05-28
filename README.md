@@ -162,3 +162,14 @@ Opens the App Store page for the specified App ID. AppId -> The app’s numeric 
 
 ### OpenAppSettings()
 Opens the iOS settings screen from the app.
+
+## Haptic System
+Haptic System lets you use haptic feedback on both iOS and Android systems. To use on Android, add this permission to the AndroidManifest file:
+```
+<uses-permission android:name="android.permission.VIBRATE" />
+```
+
+```csharp
+Haptic.TurnedOn = true;
+Haptic.Perform(HapticType.Success);
+```

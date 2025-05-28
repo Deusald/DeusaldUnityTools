@@ -21,10 +21,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace DeusaldUnityTools
 {
+    [PublicAPI]
     public static class AndroidTools
     {
         /// <summary> Use to get keyboard height to place elements above the keyboard. Use as a ratio:
@@ -33,7 +35,7 @@ namespace DeusaldUnityTools
         /// </summary>
         public static float GetKeyboardHeight()
         {
-            #if UNITY_ANDROID && !UNITY_EDITOR
+            #if TEST_SCRIPT || (UNITY_ANDROID && !UNITY_EDITOR)
             try
             {
                 AndroidJavaClass  unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
@@ -65,7 +67,7 @@ namespace DeusaldUnityTools
         /// </summary>
         public static void LaunchOrOpenPlayStore(string packageName)
         {
-            #if UNITY_ANDROID && !UNITY_EDITOR
+            #if TEST_SCRIPT || (UNITY_ANDROID && !UNITY_EDITOR)
             try
             {
                 using (AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
@@ -101,7 +103,7 @@ namespace DeusaldUnityTools
         /// </summary>
         public static void TryOpenPlayStorePage(string packageName)
         {
-            #if UNITY_ANDROID && !UNITY_EDITOR
+            #if TEST_SCRIPT || (UNITY_ANDROID && !UNITY_EDITOR)
             try
             {
                 string marketUri = $"market://details?id={packageName}";
@@ -146,7 +148,7 @@ namespace DeusaldUnityTools
         /// <summary> Opens app settings. </summary>
         public static void OpenAppSettings()
         {
-            #if UNITY_ANDROID && !UNITY_EDITOR
+            #if TEST_SCRIPT || (UNITY_ANDROID && !UNITY_EDITOR)
             try
             {
                 using (var unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))

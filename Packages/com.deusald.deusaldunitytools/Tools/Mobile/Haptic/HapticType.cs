@@ -1,4 +1,4 @@
-// MIT License
+﻿// MIT License
 
 // DeusaldUnityTools:
 // Copyright (c) 2020 Adam "Deusald" Orliński
@@ -21,26 +21,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
-
-extern "C" void _OpenAppStorePage(const char* appIdCStr)
+namespace DeusaldUnityTools
 {
-    NSString *appId = [NSString stringWithUTF8String:appIdCStr];
-    NSString *urlString = [NSString stringWithFormat:@"https://apps.apple.com/app/id%@", appId];
-    NSURL *url = [NSURL URLWithString:urlString];
-
-    if ([[UIApplication sharedApplication] canOpenURL:url]) {
-        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
-    }
-}
-
-extern "C" void _OpenAppSettings()
-{
-    if (@available(iOS 8.0, *)) {
-        NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-        if ([[UIApplication sharedApplication] canOpenURL:settingsURL]) {
-            [[UIApplication sharedApplication] openURL:settingsURL options:@{} completionHandler:nil];
-        }
+    public enum HapticType
+    {
+        Default   = 0,
+        Vibrate   = 1,
+        Light     = 2,
+        Medium    = 3,
+        Heavy     = 4,
+        Selection = 5,
+        Success   = 6,
+        Warning   = 7,
+        Error     = 8
     }
 }
