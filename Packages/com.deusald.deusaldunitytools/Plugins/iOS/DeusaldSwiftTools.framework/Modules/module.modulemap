@@ -1,0 +1,6 @@
+framework module DeusaldSwiftTools {
+  umbrella header "DeusaldSwiftTools.h"
+  export *
+
+  module * { export * }
+}

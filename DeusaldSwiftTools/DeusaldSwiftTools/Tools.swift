@@ -1,4 +1,4 @@
-﻿// MIT License
+// MIT License
 
 // DeusaldUnityTools:
 // Copyright (c) 2020 Adam "Deusald" Orliński
@@ -21,20 +21,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using JetBrains.Annotations;
+import UIKit
 
-namespace DeusaldUnityTools
-{
-    [PublicAPI]
-    public enum HapticType
-    {
-        Default   = 0,
-        Light     = 1,
-        Medium    = 2,
-        Heavy     = 3,
-        Selection = 4,
-        Success   = 5,
-        Warning   = 6,
-        Error     = 7
+@_cdecl("_OpenAppStorePage")
+public func OpenAppStorePage(appIdCStr: UnsafePointer<CChar>) {
+    let appId = String(cString: appIdCStr)
+    let urlString = "https://apps.apple.com/app/id\(appId)"
+    
+    guard let url = URL(string: urlString),
+          UIApplication.shared.canOpenURL(url) else {
+        return
+    }
+    
+    DispatchQueue.main.async {
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+}
+
+@_cdecl("_OpenAppSettings")
+public func OpenAppSettings() {
+    guard let settingsURL = URL(string: UIApplication.openSettingsURLString),
+          UIApplication.shared.canOpenURL(settingsURL) else {
+        return
+    }
+    
+    DispatchQueue.main.async {
+        UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
     }
 }

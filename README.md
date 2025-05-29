@@ -20,6 +20,12 @@ You can add this library to Unity project in 2 ways:
 * Some useful unity extension methods
 * Secure Player Prefs
 * Apple Game Center Auth Plugin
+* Tweens System
+* Android and iOS Tools
+
+## Native Swift/Java Projects
+### Deusald Swift Tools
+To update the iOS Framework, after building it in XCode, go to Derived data (Xcode Preferences/Locations) -> Build/Products/Release-iphoneos/DeusaldSwiftTools.framework and replace it under Plugins/iOS folder.
 
 ## Editor Tools
 
@@ -52,68 +58,27 @@ Game Center Auth Plugin lets you get detailed data about player logged in using 
 This data also contains fields that can be used to securely authenticate player using external server.
 
 ```csharp
-private struct GameCenterAuth
-{
-    public bool   Success      { get; set; }
-    public string Error        { get; set; }
-    public string PublicKeyUrl { get; set; }
-    public string Signature    { get; set; }
-    public ulong  TimeStamp    { get; set; }
-    public string Salt         { get; set; }
-    public string GamePlayerId { get; set; }
-    public string TeamPlayerId { get; set; }
-    public string DisplayName  { get; set; }
-    public string Alias        { get; set; }
-    public string BundleId     { get; set; }
-}
+if (Social.localUser.authenticated) return;
+TaskCompletionSource<bool> authenticateTask = new TaskCompletionSource<bool>();
+Social.localUser.Authenticate(result => { authenticateTask.TrySetResult(result); });
 
-private static TaskCompletionSource<GameCenterAuth> _SignatureTask;
+bool authenticateResult = await authenticateTask.Task;
 
-[MonoPInvokeCallback(typeof(GameCenterSignature.OnSucceeded))]
-private static void OnSuccess(string publicKeyUrl, ulong timestamp, string signature, string salt,
-                              string gamePlayerId, string teamPlayerId, string displayName, string alias, string bundleId)
-{
-    _SignatureTask.TrySetResult(new GameCenterAuth
-    {
-        Success      = true,
-        Error        = "",
-        PublicKeyUrl = publicKeyUrl,
-        TimeStamp    = timestamp,
-        Signature    = signature,
-        Salt         = salt,
-        GamePlayerId = gamePlayerId,
-        TeamPlayerId = teamPlayerId,
-        DisplayName  = displayName,
-        Alias        = alias,
-        BundleId     = bundleId
-    });
-}
+if (!authenticateResult) throw new Exception("Failed to authenticate in game center!");
 
-[MonoPInvokeCallback(typeof(GameCenterSignature.OnFailed))]
-private static void OnFailed(string reason)
-{
-    _SignatureTask.TrySetResult(new GameCenterAuth
-    {
-        Success      = false,
-        Error        = reason,
-        PublicKeyUrl = "",
-        TimeStamp    = 0,
-        Signature    = "",
-        Salt         = "",
-        GamePlayerId = "",
-        TeamPlayerId = "",
-        DisplayName  = "",
-        Alias        = "",
-        BundleId     = ""
-    });
-}
+GameCenterAuth.GameCenterAuthResult authResult = await GameCenterAuth.GenerateIdentityVerificationSignatureAsync();
 
-public async Task LoginAsync()
-{
-    _SignatureTask = new TaskCompletionSource<GameCenterAuth>();
-    GameCenterSignature.Generate(OnSuccess, OnFailed);
-    GameCenterAuth authResult = await _SignatureTask.Task;
-}
+if (!authResult.Success) throw new Exception($"Failed to get game center auth data. {authResult.Error}");
+
+Debug.Log(authResult.PublicKeyUrl);
+Debug.Log(authResult.Signature);
+Debug.Log(authResult.TimeStamp);
+Debug.Log(authResult.Salt);
+Debug.Log(authResult.GamePlayerId);
+Debug.Log(authResult.TeamPlayerId);
+Debug.Log(authResult.DisplayName);
+Debug.Log(authResult.Alias);
+Debug.Log(authResult.BundleId);
 ```
 
 ## Tweens System

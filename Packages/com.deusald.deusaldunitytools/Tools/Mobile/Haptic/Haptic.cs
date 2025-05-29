@@ -36,9 +36,21 @@ namespace DeusaldUnityTools
     [PublicAPI]
     public static class Haptic
     {
-        public static bool TurnedOn { get; set; } = true;
-
+        #if TEST_SCRIPT_ANDROID || TEST_SCRIPT_IOS || (UNITY_ANDROID && !UNITY_EDITOR) || (UNITY_IOS && !UNITY_EDITOR)
+        
+        private enum SupportedHapticType
+        {
+            NotChecked = 0,
+            None       = 1,
+            Base       = 2,
+            Advanced   = 3
+        }
+        
         private static SupportedHapticType _SupportedHapticType = SupportedHapticType.NotChecked;
+        
+        #endif
+
+        public static bool TurnedOn { get; set; } = true;
 
         public static void Perform(HapticType type)
         {

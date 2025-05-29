@@ -1,0 +1,26 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.0.3 effective-5.10 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)
+// swift-module-flags: -target arm64-apple-ios18.2 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-bare-slash-regex -module-name DeusaldSwiftTools
+import AudioToolbox
+@_exported import DeusaldSwiftTools
+import Foundation
+import GameKit
+import Swift
+import UIKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+@_cdecl("_IsHapticSupported")
+public func IsHapticSupported() -> Swift.Int32
+@_cdecl("_TapticEngine")
+public func TapticEngine(_ type: Swift.Int32)
+@_cdecl("_Haptic")
+public func Haptic(_ type: Swift.Int32)
+public typealias GenerateSucceeded = @convention(c) (Swift.UnsafePointer<Swift.CChar>, Swift.UInt64, Swift.UnsafePointer<Swift.CChar>, Swift.UnsafePointer<Swift.CChar>, Swift.UnsafePointer<Swift.CChar>, Swift.UnsafePointer<Swift.CChar>, Swift.UnsafePointer<Swift.CChar>, Swift.UnsafePointer<Swift.CChar>, Swift.UnsafePointer<Swift.CChar>) -> Swift.Void
+public typealias GenerateFailed = @convention(c) (Swift.UnsafePointer<Swift.CChar>) -> Swift.Void
+@_cdecl("_GenerateIdentityVerificationSignature")
+public func GenerateIdentityVerificationSignature(_ onSucceeded: DeusaldSwiftTools.GenerateSucceeded, _ onFailed: DeusaldSwiftTools.GenerateFailed)
+@_cdecl("_OpenAppStorePage")
+public func OpenAppStorePage(appIdCStr: Swift.UnsafePointer<Swift.CChar>)
+@_cdecl("_OpenAppSettings")
+public func OpenAppSettings()

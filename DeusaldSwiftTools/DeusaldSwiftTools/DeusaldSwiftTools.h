@@ -1,4 +1,4 @@
-﻿// MIT License
+// MIT License
 
 // DeusaldUnityTools:
 // Copyright (c) 2020 Adam "Deusald" Orliński
@@ -21,20 +21,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using JetBrains.Annotations;
+#import <Foundation/Foundation.h>
 
-namespace DeusaldUnityTools
-{
-    [PublicAPI]
-    public enum HapticType
-    {
-        Default   = 0,
-        Light     = 1,
-        Medium    = 2,
-        Heavy     = 3,
-        Selection = 4,
-        Success   = 5,
-        Warning   = 6,
-        Error     = 7
-    }
-}
+//! Project version number for DeusaldSwiftTools.
+FOUNDATION_EXPORT double DeusaldSwiftToolsVersionNumber;
+
+//! Project version string for DeusaldSwiftTools.
+FOUNDATION_EXPORT const unsigned char DeusaldSwiftToolsVersionString[];

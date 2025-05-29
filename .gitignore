@@ -1,4 +1,4 @@
-﻿## Deusald Unity .gitignore
+## Deusald Unity .gitignore
 ## Version: 1.0.1
 
 ## Ignore all files:
@@ -15,8 +15,6 @@
 ![pP]ackages/**
 ![iI]mages
 ![iI]mages/**
-![gG]ameCenterAuthPluginSource
-![gG]ameCenterAuthPluginSource/**
 
 #Ignore TMP folder in project
 [aA]ssets/TMP
@@ -70,5 +68,7 @@ Assets/**/UnityVS
 .DS_Store
 
 # Ignore project specific:
-Assets/Plugins/Sirenix
-Assets/Plugins/Sirenix.meta
+![gG]ameCenterAuthPluginSource
+![gG]ameCenterAuthPluginSource/**
+![dD]eusaldSwiftTools
+![dD]eusaldSwiftTools/**
