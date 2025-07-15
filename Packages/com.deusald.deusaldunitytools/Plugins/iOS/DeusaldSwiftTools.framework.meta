@@ -55,7 +55,7 @@ PluginImporter:
         AddToEmbeddedBinaries: true
         CPU: AnyCPU
         CompileFlags: 
-        FrameworkDependencies: AudioToolbox;GameKit;UIKit;
+        FrameworkDependencies: AudioToolbox;Foundation;GameKit;UIKit;
   userData: 
   assetBundleName: 
   assetBundleVariant: 

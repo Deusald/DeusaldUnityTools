@@ -10,16 +10,20 @@ import UIKit
 import _Concurrency
 import _StringProcessing
 import _SwiftConcurrencyShims
+public typealias GenerateSucceeded = @convention(c) (Swift.UnsafePointer<Swift.CChar>, Swift.UInt64, Swift.UnsafePointer<Swift.CChar>, Swift.UnsafePointer<Swift.CChar>, Swift.UnsafePointer<Swift.CChar>, Swift.UnsafePointer<Swift.CChar>, Swift.UnsafePointer<Swift.CChar>, Swift.UnsafePointer<Swift.CChar>, Swift.UnsafePointer<Swift.CChar>) -> Swift.Void
+public typealias GenerateFailed = @convention(c) (Swift.UnsafePointer<Swift.CChar>) -> Swift.Void
+@_cdecl("_GenerateIdentityVerificationSignature")
+public func GenerateIdentityVerificationSignature(_ onSucceeded: DeusaldSwiftTools.GenerateSucceeded, _ onFailed: DeusaldSwiftTools.GenerateFailed)
 @_cdecl("_IsHapticSupported")
 public func IsHapticSupported() -> Swift.Int32
 @_cdecl("_TapticEngine")
 public func TapticEngine(_ type: Swift.Int32)
 @_cdecl("_Haptic")
 public func Haptic(_ type: Swift.Int32)
-public typealias GenerateSucceeded = @convention(c) (Swift.UnsafePointer<Swift.CChar>, Swift.UInt64, Swift.UnsafePointer<Swift.CChar>, Swift.UnsafePointer<Swift.CChar>, Swift.UnsafePointer<Swift.CChar>, Swift.UnsafePointer<Swift.CChar>, Swift.UnsafePointer<Swift.CChar>, Swift.UnsafePointer<Swift.CChar>, Swift.UnsafePointer<Swift.CChar>) -> Swift.Void
-public typealias GenerateFailed = @convention(c) (Swift.UnsafePointer<Swift.CChar>) -> Swift.Void
-@_cdecl("_GenerateIdentityVerificationSignature")
-public func GenerateIdentityVerificationSignature(_ onSucceeded: DeusaldSwiftTools.GenerateSucceeded, _ onFailed: DeusaldSwiftTools.GenerateFailed)
+@_cdecl("_ShareText")
+public func ShareText(_ cText: Swift.UnsafePointer<Swift.CChar>)
+@_cdecl("_ShareFile")
+public func ShareFile(_ cPaths: Swift.UnsafePointer<Swift.CChar>, _ cMessage: Swift.UnsafePointer<Swift.CChar>)
 @_cdecl("_OpenAppStorePage")
 public func OpenAppStorePage(appIdCStr: Swift.UnsafePointer<Swift.CChar>)
 @_cdecl("_OpenAppSettings")

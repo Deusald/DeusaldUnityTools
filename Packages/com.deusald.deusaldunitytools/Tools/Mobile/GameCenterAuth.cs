@@ -67,12 +67,6 @@ namespace DeusaldUnityTools
         private delegate void GenerateFailed(string reason);
         
         [DllImport("__Internal")]
-        private static extern void _OpenAppStorePage(string appId);
-
-        [DllImport("__Internal")]
-        private static extern void _OpenAppSettings();
-        
-        [DllImport("__Internal")]
         private static extern void _GenerateIdentityVerificationSignature(
             GenerateSucceeded onSuccess,
             GenerateFailed onFailure

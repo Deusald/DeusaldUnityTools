@@ -128,6 +128,15 @@ Opens the App Store page for the specified App ID. AppId -> The app’s numeric 
 ### OpenAppSettings()
 Opens the iOS settings screen from the app.
 
+### ShareText(string text)
+Uses native iOS methods to share text via another app.
+
+### ShareFile(string path, string text)
+Uses native iOS methods to share the file via another app.
+
+### ShareFiles(string[] paths, string text)
+Uses native iOS methods to share the files via another app.
+
 ## Haptic System
 Haptic System lets you use haptic feedback on both iOS and Android systems. To use on Android, add this permission to the AndroidManifest file:
 ```

@@ -22,6 +22,7 @@
 // SOFTWARE.
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 //! Project version number for DeusaldSwiftTools.
 FOUNDATION_EXPORT double DeusaldSwiftToolsVersionNumber;

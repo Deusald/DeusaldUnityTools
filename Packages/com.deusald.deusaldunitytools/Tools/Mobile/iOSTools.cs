@@ -39,6 +39,12 @@ namespace DeusaldUnityTools
 
         [DllImport("__Internal")]
         private static extern void _OpenAppSettings();
+        
+        [DllImport("__Internal")]
+        private static extern void _ShareText(string text);
+
+        [DllImport("__Internal")]
+        private static extern void _ShareFile(string path, string text);
         #endif
 
         /// <summary>
@@ -63,6 +69,51 @@ namespace DeusaldUnityTools
             _OpenAppSettings();
             #else
             Debug.Log("This feature only works on iOS devices.");
+            #endif
+        }
+
+        /// <summary>
+        /// Uses native iOS methods to share text via another app.
+        /// </summary>
+        public static void ShareText(string text)
+        {
+            #if TEST_SCRIPT || (UNITY_IOS && !UNITY_EDITOR)
+            _ShareText(text);
+            #else
+            Debug.Log($"Would share {text} using native iOS method via another app.");
+            #endif
+        }
+
+        /// <summary>
+        /// Uses native iOS methods to share the file via another app.
+        /// </summary>
+        public static void ShareFile(string path, string text)
+        {
+            #if TEST_SCRIPT || (UNITY_IOS && !UNITY_EDITOR)
+            _ShareFile(path, text);
+            #else
+            Debug.Log($"Would share file on path: {path} and text: {text} using native iOS method via another app.");
+            #endif
+        }
+        
+        /// <summary>
+        /// Uses native iOS methods to share the files via another app.
+        /// </summary>
+        public static void ShareFiles(string[] paths, string text)
+        {
+            const string separator = "<deusald_sep>";
+            string connectedPath = "";
+
+            for (int x = 0; x < paths.Length; ++x)
+            {
+                if (x == paths.Length - 1) connectedPath += paths[x];
+                else connectedPath += paths[x] + separator;
+            }
+            
+            #if TEST_SCRIPT || (UNITY_IOS && !UNITY_EDITOR)
+            _ShareFile(connectedPath, text);
+            #else
+            Debug.Log($"Would share file on path: {connectedPath} and text: {text} using native iOS method via another app.");
             #endif
         }
     }
