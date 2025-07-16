@@ -107,10 +107,14 @@ positionY = AndroidAppLauncher.GetKeyboardHeight() * rate + margin
 ### LaunchOrOpenPlayStore(string packageName)
 Opens app and if that app is not installed, then opens a Play Store page for a specific app, with fallback to browser if Play Store isn't available.
 To be able to use this method, you need to specify which apps will be checked using this method in an Android manifest file:
-```
-<queries>
-    <package android:name="com.google.android.play.games" />
-</queries>
+```xml
+<manifest>
+   <application>
+  </application>
+    <queries>
+        <package android:name="com.google.android.play.games" />
+    </queries>
+</manifest>
 ```
 
 ### TryOpenPlayStorePage(string packageName)
@@ -118,6 +122,29 @@ Opens a Play Store page for a specific app, with fallback to browser if Play Sto
 
 ### OpenAppSettings()
 Opens app settings.
+
+### ShareText(string text)
+Uses native Android methods to share text via another app.
+To be able to use this method and other Share Android method you must put this code in your AndroidManifest.xml:
+```xml
+<manifest>
+   <application>
+      <provider android:name="androidx.core.content.FileProvider" android:authorities="com.yourcompany.yourapp" android:exported="false" android:grantUriPermissions="true">
+         <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_provider_paths" />
+      </provider>
+   </application>
+</manifest>
+```
+You must replace `com.yourcompany.yourapp` in `android:authorities` with your own unique string!
+Before executing any Share methods on Android you must also initialize the Share module by calling (replace `com.yourcompany.yourapp` with the same string you've used in `android:authorities`:
+```csharp
+AndroidTools.InitShare("com.yourcompany.yourapp");
+```
+### ShareFile(string path, string text)
+Uses native Android methods to share the file via another app.
+
+### ShareFiles(string[] paths, string text)
+Uses native Android methods to share the files via another app.
 
 ## iOS Tools
 Set of methods that could be useful on iOS devices:
@@ -139,8 +166,12 @@ Uses native iOS methods to share the files via another app.
 
 ## Haptic System
 Haptic System lets you use haptic feedback on both iOS and Android systems. To use on Android, add this permission to the AndroidManifest file:
-```
-<uses-permission android:name="android.permission.VIBRATE" />
+```xml
+<manifest>
+   <application>
+   </application>
+   <uses-permission android:name="android.permission.VIBRATE" />
+</manifest>
 ```
 
 ```csharp

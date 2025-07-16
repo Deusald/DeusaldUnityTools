@@ -37,7 +37,7 @@ namespace DeusaldUnityTools
     public static class Haptic
     {
         #if TEST_SCRIPT_ANDROID || TEST_SCRIPT_IOS || (UNITY_ANDROID && !UNITY_EDITOR) || (UNITY_IOS && !UNITY_EDITOR)
-        
+
         private enum SupportedHapticType
         {
             NotChecked = 0,
@@ -45,9 +45,9 @@ namespace DeusaldUnityTools
             Base       = 2,
             Advanced   = 3
         }
-        
+
         private static SupportedHapticType _SupportedHapticType = SupportedHapticType.NotChecked;
-        
+
         #endif
 
         public static bool TurnedOn { get; set; } = true;
@@ -86,72 +86,35 @@ namespace DeusaldUnityTools
         #endif
 
         #if TEST_SCRIPT_ANDROID || (UNITY_ANDROID && !UNITY_EDITOR)
+
+        private const string _UNITY_PLAYER                = "com.unity3d.player.UnityPlayer";
+        private const string _CURRENT_ACTIVITY            = "currentActivity";
+        private const string _PLUGIN_CLASS_NAME           = "com.deusald.deusaldjavatools.Haptics";
+        private const string _IS_HAPTICS_SUPPORTED_METHOD = "isHapticSupported";
+        private const string _BASE_METHOD                 = "baseVibrate";
+        private const string _ADVANCED_METHOD             = "advancedVibrate";
+
+        private static readonly AndroidJavaClass _HapticsClass = new(_PLUGIN_CLASS_NAME);
         
-        private const long _LIGHT_DURATION   = 20;
-        private const long _MEDIUM_DURATION  = 40;
-        private const long _HEAVY_DURATION   = 80;
-        private const int  _LIGHT_AMPLITUDE  = 40;
-        private const int  _MEDIUM_AMPLITUDE = 120;
-        private const int  _HEAVY_AMPLITUDE  = 255;
-
-        private static readonly Dictionary<HapticType, long[]> _Patterns = new()
-        {
-            { HapticType.Light, new[] { _LIGHT_DURATION } },
-            { HapticType.Medium, new[] { _MEDIUM_DURATION } },
-            { HapticType.Heavy, new[] { _HEAVY_DURATION } },
-            { HapticType.Selection, new[] { _LIGHT_DURATION } },
-            { HapticType.Success, new[] { 0, _LIGHT_DURATION, _LIGHT_DURATION, _HEAVY_DURATION } },
-            { HapticType.Warning, new[] { 0, _HEAVY_DURATION, _LIGHT_DURATION, _MEDIUM_DURATION } },
-            { HapticType.Error, new[] { 0, _MEDIUM_DURATION, _LIGHT_DURATION, _MEDIUM_DURATION, _LIGHT_DURATION, _HEAVY_DURATION, _LIGHT_DURATION, _LIGHT_DURATION } }
-        };
-
-        private static readonly Dictionary<HapticType, int[]> _Amplitudes = new()
-        {
-            { HapticType.Light, new[] { _LIGHT_AMPLITUDE } },
-            { HapticType.Medium, new[] { _MEDIUM_AMPLITUDE } },
-            { HapticType.Heavy, new[] { _HEAVY_AMPLITUDE } },
-            { HapticType.Selection, new[] { _LIGHT_AMPLITUDE } },
-            { HapticType.Success, new[] { 0, _LIGHT_AMPLITUDE, 0, _HEAVY_AMPLITUDE } },
-            { HapticType.Warning, new[] { 0, _HEAVY_AMPLITUDE, 0, _MEDIUM_AMPLITUDE } },
-            { HapticType.Error, new[] { 0, _MEDIUM_AMPLITUDE, 0, _MEDIUM_AMPLITUDE, 0, _HEAVY_AMPLITUDE, 0, _LIGHT_AMPLITUDE } },
-        };
-
-        private static AndroidJavaClass  _UnityPlayer     = new("com.unity3d.player.UnityPlayer");
-        private static AndroidJavaObject _CurrentActivity = _UnityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-        private static AndroidJavaObject _AndroidVibrator = _CurrentActivity.Call<AndroidJavaObject>("getSystemService", "vibrator");
-        private static AndroidJavaClass  _VibrationEffectClass;
-
         private static void PerformInternalAndroid(HapticType type)
         {
             if (!TurnedOn) return;
-            if (_SupportedHapticType == SupportedHapticType.NotChecked) SetHapticSupportedAndroid();
+            if (_SupportedHapticType == SupportedHapticType.NotChecked) _SupportedHapticType = IsHapticSupported();
 
-            if (type != HapticType.Default && _SupportedHapticType == SupportedHapticType.Base) _AndroidVibrator?.Call("vibrate", _Patterns[type]);
-            else if (type != HapticType.Default && _SupportedHapticType == SupportedHapticType.Advanced)
-            {
-                if (_Patterns[type].Length == 1)
-                {
-                    AndroidJavaObject effect = _VibrationEffectClass.CallStatic<AndroidJavaObject>("createOneShot", _Patterns[type][0], _Amplitudes[type][0]);
-                    _AndroidVibrator?.Call("vibrate", effect);
-                }
-                else
-                {
-                    AndroidJavaObject effect = _VibrationEffectClass.CallStatic<AndroidJavaObject>("createWaveform", _Patterns[type], _Amplitudes[type], -1);
-                    _AndroidVibrator?.Call("vibrate", effect);
-                }
-            }
+            if (type != HapticType.Default && _SupportedHapticType == SupportedHapticType.Base) _HapticsClass.CallStatic(_BASE_METHOD,              type.ToString());
+            else if (type != HapticType.Default && _SupportedHapticType == SupportedHapticType.Advanced) _HapticsClass.CallStatic(_ADVANCED_METHOD, type.ToString());
             else Handheld.Vibrate();
         }
 
-        private static void SetHapticSupportedAndroid()
+        private static SupportedHapticType IsHapticSupported()
         {
-            int apiLevel = int.Parse(SystemInfo.operatingSystem.Substring(SystemInfo.operatingSystem.IndexOf("-", StringComparison.Ordinal) + 1, 3));
-            _SupportedHapticType = apiLevel >= 26 ? SupportedHapticType.Advanced : SupportedHapticType.Base;
-            if (_SupportedHapticType != SupportedHapticType.Advanced) return;
-            _VibrationEffectClass = new AndroidJavaClass("android.os.VibrationEffect");
-            if (_VibrationEffectClass == null) _SupportedHapticType = SupportedHapticType.Base;
+            using (AndroidJavaClass unityPlayer = new AndroidJavaClass(_UNITY_PLAYER))
+            using (AndroidJavaObject activity = unityPlayer.GetStatic<AndroidJavaObject>(_CURRENT_ACTIVITY))
+            {
+                return (SupportedHapticType)_HapticsClass.CallStatic<int>(_IS_HAPTICS_SUPPORTED_METHOD, activity);
+            }
         }
-        
+
         #endif
     }
 }

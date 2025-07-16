@@ -20,7 +20,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-
+#define TEST_SCRIPT
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -29,6 +29,17 @@ namespace DeusaldUnityTools
     [PublicAPI]
     public static class AndroidTools
     {
+        private static AndroidJavaObject _CurrentActivity;
+
+        private static readonly AndroidJavaClass  _ToolsClass = new("com.deusald.deusaldjavatools.Tools");
+        private static readonly AndroidJavaObject _ShareClass = new("com.deusald.deusaldjavatools.Share");
+        
+        public static void RefreshCurrentActivity()
+        {
+            using AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            _CurrentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+        }
+        
         /// <summary> Use to get keyboard height to place elements above the keyboard. Use as a ratio:
         /// float rate = referenceCanvasHeight / Screen.height;
         /// positionY = AndroidAppLauncher.GetKeyboardHeight() * rate + margin
@@ -38,21 +49,8 @@ namespace DeusaldUnityTools
             #if TEST_SCRIPT || (UNITY_ANDROID && !UNITY_EDITOR)
             try
             {
-                AndroidJavaClass  unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-                AndroidJavaObject activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-                AndroidJavaObject decorView = activity.Call<AndroidJavaObject>("getWindow").Call<AndroidJavaObject>("getDecorView");
-                AndroidJavaObject rect = new AndroidJavaObject("android.graphics.Rect");
-
-                decorView.Call("getWindowVisibleDisplayFrame", rect);
-                int visibleHeight = rect.Call<int>("height");
-
-                AndroidJavaObject rootView = decorView.Call<AndroidJavaObject>("getRootView");
-                int               screenHeight = rootView.Call<int>("getHeight");
-
-                int keyboardHeight = screenHeight - visibleHeight;
-
-                // If height is reasonable (to avoid false positives)
-                if (keyboardHeight > screenHeight / 5) return keyboardHeight;
+                if (_CurrentActivity == null) RefreshCurrentActivity();
+                return _ToolsClass.CallStatic<int>("getKeyboardHeight", _CurrentActivity);
             }
             catch (System.Exception e)
             {
@@ -70,25 +68,8 @@ namespace DeusaldUnityTools
             #if TEST_SCRIPT || (UNITY_ANDROID && !UNITY_EDITOR)
             try
             {
-                using (AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
-                using (AndroidJavaObject currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity"))
-                using (AndroidJavaObject packageManager = currentActivity.Call<AndroidJavaObject>("getPackageManager"))
-                {
-                    AndroidJavaObject launchIntent = packageManager.Call<AndroidJavaObject>("getLaunchIntentForPackage", packageName);
-
-                    if (launchIntent != null)
-                    {
-                        // App is installed, launch it
-                        Debug.Log($"{packageName} is installed, launching it...");
-                        currentActivity.Call("startActivity", launchIntent);
-                    }
-                    else
-                    {
-                        // App isn't installed, try to open Play Store
-                        Debug.Log($"{packageName} is not installed, opening Play Store...");
-                        TryOpenPlayStorePage(packageName);
-                    }
-                }
+                if (_CurrentActivity == null) RefreshCurrentActivity();
+                _ToolsClass.CallStatic("launchOrOpenPlayStore", _CurrentActivity, packageName);
             }
             catch (System.Exception ex)
             {
@@ -106,35 +87,8 @@ namespace DeusaldUnityTools
             #if TEST_SCRIPT || (UNITY_ANDROID && !UNITY_EDITOR)
             try
             {
-                string marketUri = $"market://details?id={packageName}";
-                string webUri = $"https://play.google.com/store/apps/details?id={packageName}";
-
-                using (AndroidJavaObject intent = new AndroidJavaObject("android.content.Intent", "android.intent.action.VIEW"))
-                using (AndroidJavaClass uriClass = new AndroidJavaClass("android.net.Uri"))
-                {
-                    AndroidJavaObject uri = uriClass.CallStatic<AndroidJavaObject>("parse", marketUri);
-                    intent.Call<AndroidJavaObject>("setData", uri);
-
-                    // Check if Play Store is available
-                    using (AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
-                    using (AndroidJavaObject currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity"))
-                    using (AndroidJavaObject packageManager = currentActivity.Call<AndroidJavaObject>("getPackageManager"))
-                    using (AndroidJavaObject resolveInfo = packageManager.Call<AndroidJavaObject>("resolveActivity", intent, 0))
-                    {
-                        if (resolveInfo != null)
-                        {
-                            currentActivity.Call("startActivity", intent);
-                        }
-                        else
-                        {
-                            // Play Store not available, fallback to browser
-                            AndroidJavaObject webIntent = new AndroidJavaObject("android.content.Intent", "android.intent.action.VIEW");
-                            AndroidJavaObject webUriObject = uriClass.CallStatic<AndroidJavaObject>("parse", webUri);
-                            webIntent.Call<AndroidJavaObject>("setData", webUriObject);
-                            currentActivity.Call("startActivity", webIntent);
-                        }
-                    }
-                }
+                if (_CurrentActivity == null) RefreshCurrentActivity();
+                _ToolsClass.CallStatic("tryOpenPlayStorePage", _CurrentActivity, packageName);
             }
             catch (System.Exception ex)
             {
@@ -151,17 +105,8 @@ namespace DeusaldUnityTools
             #if TEST_SCRIPT || (UNITY_ANDROID && !UNITY_EDITOR)
             try
             {
-                using (var unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
-                using (var context = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity"))
-                using (var uriClass = new AndroidJavaClass("android.net.Uri"))
-                using (var intent = new AndroidJavaObject("android.content.Intent",
-                           "android.settings.APPLICATION_DETAILS_SETTINGS"))
-                {
-                    string            packageName = context.Call<string>("getPackageName");
-                    AndroidJavaObject uri = uriClass.CallStatic<AndroidJavaObject>("fromParts", "package", packageName, null);
-                    intent.Call<AndroidJavaObject>("setData", uri);
-                    context.Call("startActivity", intent);
-                }
+                if (_CurrentActivity == null) RefreshCurrentActivity();
+                _ToolsClass.CallStatic("openAppSettings", _CurrentActivity);
             }
             catch (System.Exception e)
             {
@@ -169,6 +114,77 @@ namespace DeusaldUnityTools
             }
             #else
             Debug.Log("OpenAppSettings is Android-only functionality.");
+            #endif
+        }
+
+        /// <summary> This method has to be executed at the start of the application to init the Share module. </summary>
+        public static void InitShare(string providerName)
+        {
+            #if TEST_SCRIPT || (UNITY_ANDROID && !UNITY_EDITOR)
+            try
+            {
+                if (_CurrentActivity == null) RefreshCurrentActivity();
+                _ShareClass.Call("init", _CurrentActivity, providerName);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("Failed to init Android Share module: " + e.Message);
+            }
+            #else
+            Debug.Log("InitShare is Android-only functionality.");
+            #endif
+        }
+        
+        /// <summary> Uses native Android methods to share text via another app. </summary>
+        public static void ShareText(string message)
+        {
+            #if TEST_SCRIPT || (UNITY_ANDROID && !UNITY_EDITOR)
+            try
+            {
+                _ShareClass.Call("shareText", message);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("Failed to share text using native android module: " + e.Message);
+            }
+            #else
+            Debug.Log("ShareText is Android-only functionality.");
+            #endif
+        }
+        
+        /// <summary> Uses native Android methods to share the file via another app. </summary>
+        public static void ShareFile(string filePath, string message)
+        {
+            #if TEST_SCRIPT || (UNITY_ANDROID && !UNITY_EDITOR)
+            try
+            {
+                if (_CurrentActivity == null) RefreshCurrentActivity();
+                _ShareClass.Call("shareSingleFile", _CurrentActivity, filePath, message);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("Failed to share file using native android module: " + e.Message);
+            }
+            #else
+            Debug.Log("ShareSingleFile is Android-only functionality.");
+            #endif
+        }
+        
+        /// <summary> Uses native Android methods to share the files via another app. </summary>
+        public static void ShareFiles(string[] filesPaths, string message)
+        {
+            #if TEST_SCRIPT || (UNITY_ANDROID && !UNITY_EDITOR)
+            try
+            {
+                if (_CurrentActivity == null) RefreshCurrentActivity();
+                _ShareClass.Call("shareMultipleFiles", _CurrentActivity, filesPaths, message);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("Failed to share files using native android module: " + e.Message);
+            }
+            #else
+            Debug.Log("ShareMultipleFiles is Android-only functionality.");
             #endif
         }
     }
