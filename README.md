@@ -58,11 +58,7 @@ Game Center Auth Plugin lets you get detailed data about player logged in using 
 This data also contains fields that can be used to securely authenticate player using external server.
 
 ```csharp
-if (Social.localUser.authenticated) return;
-TaskCompletionSource<bool> authenticateTask = new TaskCompletionSource<bool>();
-Social.localUser.Authenticate(result => { authenticateTask.TrySetResult(result); });
-
-bool authenticateResult = await authenticateTask.Task;
+bool authenticateResult = await GameCenterAuth.AuthenticateGameCenterPlayerAsync();
 
 if (!authenticateResult) throw new Exception("Failed to authenticate in game center!");
 

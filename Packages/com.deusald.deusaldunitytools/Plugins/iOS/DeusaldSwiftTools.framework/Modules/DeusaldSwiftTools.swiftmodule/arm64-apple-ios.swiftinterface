@@ -14,6 +14,8 @@ public typealias GenerateSucceeded = @convention(c) (Swift.UnsafePointer<Swift.C
 public typealias GenerateFailed = @convention(c) (Swift.UnsafePointer<Swift.CChar>) -> Swift.Void
 @_cdecl("_GenerateIdentityVerificationSignature")
 public func GenerateIdentityVerificationSignature(_ onSucceeded: DeusaldSwiftTools.GenerateSucceeded, _ onFailed: DeusaldSwiftTools.GenerateFailed)
+@_cdecl("_AuthenticateGameCenterPlayer")
+public func AuthenticateGameCenterPlayer(_ onSuccess: @convention(c) () -> Swift.Void, _ onFailure: @convention(c) (Swift.UnsafePointer<Swift.CChar>) -> Swift.Void)
 @_cdecl("_IsHapticSupported")
 public func IsHapticSupported() -> Swift.Int32
 @_cdecl("_TapticEngine")

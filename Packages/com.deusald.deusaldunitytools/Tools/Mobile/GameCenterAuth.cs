@@ -23,6 +23,7 @@
 
 using JetBrains.Annotations;
 using System.Threading.Tasks;
+using UnityEngine;
 #if TEST_SCRIPT || (UNITY_IOS && !UNITY_EDITOR)
 using System.Runtime.InteropServices;
 #endif
@@ -47,9 +48,9 @@ namespace DeusaldUnityTools
             public string Alias        { get; set; }
             public string BundleId     { get; set; }
         }
-        
+
         #if TEST_SCRIPT || (UNITY_IOS && !UNITY_EDITOR)
-        
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void GenerateSucceeded(
             string publicKeyUrl,
@@ -65,15 +66,25 @@ namespace DeusaldUnityTools
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void GenerateFailed(string reason);
-        
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate void AuthSucceeded();
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate void AuthFailed(string reason);
+
+        [DllImport("__Internal")]
+        private static extern void _AuthenticateGameCenterPlayer(AuthSucceeded onSuccess, AuthFailed onFailure);
+
         [DllImport("__Internal")]
         private static extern void _GenerateIdentityVerificationSignature(
             GenerateSucceeded onSuccess,
             GenerateFailed onFailure
         );
-        
+
+        private static TaskCompletionSource<bool>                 _AuthTask;
         private static TaskCompletionSource<GameCenterAuthResult> _SignatureTask;
-        
+
         #endif
 
         public static async Task<GameCenterAuthResult> GenerateIdentityVerificationSignatureAsync()
@@ -87,7 +98,31 @@ namespace DeusaldUnityTools
             #endif
         }
         
+        public static async Task<bool> AuthenticateGameCenterPlayerAsync()
+        {
+            #if TEST_SCRIPT || (UNITY_IOS && !UNITY_EDITOR)
+            _AuthTask = new TaskCompletionSource<bool>();
+            _AuthenticateGameCenterPlayer(OnAuthSucceeded, OnAuthFailed);
+            return await _AuthTask.Task;
+            #else
+            return await NonIOSPlatformAuthenticateAsync();
+            #endif
+        }
+
         #if TEST_SCRIPT || (UNITY_IOS && !UNITY_EDITOR)
+
+        [AOT.MonoPInvokeCallback(typeof(AuthSucceeded))]
+        private static void OnAuthSucceeded()
+        {
+            _AuthTask.TrySetResult(true);
+        }
+
+        [AOT.MonoPInvokeCallback(typeof(AuthFailed))]
+        private static void OnAuthFailed(string reason)
+        {
+            Debug.LogWarning("Game Center authentication failed: " + reason);
+            _AuthTask.TrySetResult(false);
+        }
         
         [AOT.MonoPInvokeCallback(typeof(GenerateSucceeded))]
         private static void OnSucceeded(
@@ -116,7 +151,7 @@ namespace DeusaldUnityTools
                 BundleId     = bundleId
             });
         }
-        
+
         [AOT.MonoPInvokeCallback(typeof(GenerateFailed))]
         private static void OnFailed(string reason)
         {
@@ -135,27 +170,33 @@ namespace DeusaldUnityTools
                 BundleId     = ""
             });
         }
-        
+
         #else
 
+        private static Task<bool> NonIOSPlatformAuthenticateAsync()
+        {
+            Debug.LogWarning("Game Center authentication is only available on iOS.");
+            return Task.FromResult(false);
+        }
+        
         private static Task<GameCenterAuthResult> NonIOSPlatformResultAsync()
         {
             return Task.FromResult(new GameCenterAuthResult
             {
-                Success      = false,
-                Error        = "GameCenter authentication is only available for iOS!",
+                Success = false,
+                Error = "GameCenter authentication is only available for iOS!",
                 PublicKeyUrl = "",
-                TimeStamp    = 0,
-                Signature    = "",
-                Salt         = "",
+                TimeStamp = 0,
+                Signature = "",
+                Salt = "",
                 GamePlayerId = "",
                 TeamPlayerId = "",
-                DisplayName  = "",
-                Alias        = "",
-                BundleId     = ""
+                DisplayName = "",
+                Alias = "",
+                BundleId = ""
             });
         }
-        
+
         #endif
     }
 }

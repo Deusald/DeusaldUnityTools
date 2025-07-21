@@ -86,3 +86,32 @@ public func GenerateIdentityVerificationSignature(
         )
     }
 }
+
+@_cdecl("_AuthenticateGameCenterPlayer")
+public func AuthenticateGameCenterPlayer(
+    _ onSuccess: @escaping @convention(c) () -> Void,
+    _ onFailure: @escaping @convention(c) (UnsafePointer<CChar>) -> Void
+) {
+    let player = GKLocalPlayer.local
+    player.authenticateHandler = { viewController, error in
+        if let error = error {
+            let msg = (error.localizedDescription as NSString).utf8String
+            onFailure(msg!)
+            return
+        }
+
+        if let vc = viewController {
+            // Unity cannot present the VC, so notify the C# side to handle UI fallback
+            let msg = ("Game Center UI needs to be presented." as NSString).utf8String
+            onFailure(msg!)
+            return
+        }
+
+        if player.isAuthenticated {
+            onSuccess()
+        } else {
+            let msg = ("Player is not authenticated." as NSString).utf8String
+            onFailure(msg!)
+        }
+    }
+}
