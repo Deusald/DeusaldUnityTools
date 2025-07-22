@@ -21,8 +21,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using JetBrains.Annotations;
+
 namespace DeusaldUnityTools
 {
+    [PublicAPI]
     public interface IPooledObject
     {
         void OnGetFromPool();

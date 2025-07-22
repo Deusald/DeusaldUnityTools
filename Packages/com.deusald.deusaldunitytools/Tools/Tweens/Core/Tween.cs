@@ -28,10 +28,12 @@
 #nullable enable
 using System;
 using System.Collections;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace DeusaldUnityTools
 {
+    [PublicAPI]
     public abstract class Tween
     {
         /// <summary>The is paused property will return whether the Tween is paused while also allowing you to pause the Tween.</summary>
@@ -91,6 +93,7 @@ namespace DeusaldUnityTools
         internal abstract void Update();
     }
 
+    [PublicAPI]
     public abstract class Tween<TComponent, TData> : Tween where TComponent : Component
     {
         /// <summary>The "From" value defines the starting value of the Tween. When the "From" value is not set, the Tween will use the current value of the property.</summary>

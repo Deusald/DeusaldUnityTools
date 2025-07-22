@@ -22,17 +22,16 @@
 // SOFTWARE.
 
 using System;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace DeusaldUnityTools
 {
+    [PublicAPI]
     public static class UnityExtensions
     {
-        public static int MathMod(this int a, int b)
-        {
-            return (Math.Abs(a * b) + a) % b;
-        }
+        #region Color
 
         public static Color SetAlpha(this Color color, float alpha)
         {
@@ -47,11 +46,57 @@ namespace DeusaldUnityTools
             image.color = color;
         }
 
+        public static string ToHex(this Color color) => $"#{ColorUtility.ToHtmlStringRGBA(color)}";
+
+        public static Color FromHex(this string hex)
+        {
+            if (ColorUtility.TryParseHtmlString(hex, out Color color)) return color;
+            throw new ArgumentException("Invalid hex string", nameof(hex));
+        }
+
+        public static Color Invert(this Color color) => new(1 - color.r, 1 - color.g, 1 - color.b, color.a);
+
+        #endregion Color
+
+        #region Camera
+
         public static Vector3 ClipPlaneScreenToWorld(this Camera camera, Vector3 position)
         {
             position.z = 0f;
             return camera.ScreenToWorldPoint(position);
         }
+
+        #endregion Camera
+
+        #region Vector 2
+
+        public static Vector2 Add(this Vector2 vector2, float x = 0, float y = 0)
+        {
+            return new Vector2(vector2.x + x, vector2.y + y);
+        }
+
+        public static Vector2 With(this Vector2 vector2, float? x = null, float? y = null)
+        {
+            return new Vector2(x ?? vector2.x, y ?? vector2.y);
+        }
+
+        #endregion Vector 2
+
+        #region Vector 3
+
+        public static Vector3 With(this Vector3 vector, float? x = null, float? y = null, float? z = null)
+        {
+            return new Vector3(x ?? vector.x, y ?? vector.y, z ?? vector.z);
+        }
+
+        public static Vector3 Add(this Vector3 vector, float x = 0, float y = 0, float z = 0)
+        {
+            return new Vector3(vector.x + x, vector.y + y, vector.z + z);
+        }
+
+        #endregion Vector 3
+
+        #region Transform
 
         public static void SetLocalX(this Transform transform, float target)
         {
@@ -59,14 +104,14 @@ namespace DeusaldUnityTools
             pos.x                   = target;
             transform.localPosition = pos;
         }
-        
+
         public static void SetLocalY(this Transform transform, float target)
         {
             Vector3 pos = transform.localPosition;
             pos.y                   = target;
             transform.localPosition = pos;
         }
-        
+
         public static void SetLocalZ(this Transform transform, float target)
         {
             Vector3 pos = transform.localPosition;
@@ -87,5 +132,7 @@ namespace DeusaldUnityTools
             sizeDelta.y             = target;
             rectTransform.sizeDelta = sizeDelta;
         }
+
+        #endregion Transform
     }
 }

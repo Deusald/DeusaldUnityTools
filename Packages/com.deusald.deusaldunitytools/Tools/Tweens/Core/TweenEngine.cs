@@ -26,10 +26,12 @@
 // SOFTWARE.
 
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace DeusaldUnityTools
 {
+    [PublicAPI]
     public class TweenEngine : MonoBehaviour, ITweenEngine
     {
         private readonly List<Tween>         _Tweens    = new();

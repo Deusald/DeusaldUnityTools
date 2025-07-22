@@ -28,10 +28,12 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace DeusaldUnityTools
 {
+    [PublicAPI]
     public static class SecurePlayerPrefs
     {
         public static string Password      { get; set; } = string.Empty;

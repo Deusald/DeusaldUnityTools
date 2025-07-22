@@ -21,11 +21,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 
 namespace DeusaldUnityTools
 {
+    [PublicAPI]
     public static class TMPExtensions
     {
         public static void WarpText(this TMP_Text text, AnimationCurve vertexCurve, float yCurveScaling)

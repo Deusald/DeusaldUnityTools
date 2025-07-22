@@ -22,10 +22,12 @@
 // SOFTWARE.
 
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace DeusaldUnityTools
 {
+    [PublicAPI]
     public class FpsCounter : MonoBehaviour
     {
         #region Properties

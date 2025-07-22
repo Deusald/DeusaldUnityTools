@@ -22,10 +22,12 @@
 // SOFTWARE.
 
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace DeusaldUnityTools
 {
+    [PublicAPI]
     public abstract class PoolManagerBase : MonoBehaviour, IPoolManager
     {
         [SerializeField] private int _PoolInitSize = 1;
