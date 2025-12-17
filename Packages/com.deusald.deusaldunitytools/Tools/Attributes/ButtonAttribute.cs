@@ -21,26 +21,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using TMPro;
+using System;
 using UnityEngine;
 
 namespace DeusaldUnityTools
 {
-    public class WarpTextExample : MonoBehaviour
+    [AttributeUsage(System.AttributeTargets.Method)]
+    public class ButtonAttribute : PropertyAttribute
     {
-        [SerializeField] private TMP_Text       _Text;
-        [SerializeField] public  AnimationCurve _VertexCurve;
-        [SerializeField] public  float          _YCurveScaling = 100f;
-        
-        private void Start()
-        {
-            Warp();
-        }
-
-        [Button]
-        private void Warp()
-        {
-            _Text.WarpText(_VertexCurve, _YCurveScaling);
-        }
     }
 }

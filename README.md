@@ -174,3 +174,107 @@ Haptic System lets you use haptic feedback on both iOS and Android systems. To u
 Haptic.TurnedOn = true;
 Haptic.Perform(HapticType.Success);
 ```
+
+---
+
+## Inspector Utilities
+
+### `[EditorButton]` Attribute
+
+The `EditorButton` attribute allows you to expose **methods as clickable buttons** in the Unity Inspector.
+This is especially useful for debug actions, tooling, and editor-time or runtime helpers without writing a custom inspector per class.
+
+**Features**
+
+* Works with `private` and `public` methods
+* No parameters required
+* Supports Play Mode and Edit Mode
+* Minimal reflection-based implementation
+
+#### Usage
+
+```csharp
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    [EditorButton]
+    private void ResetCounter()
+    {
+        Debug.Log("Counter reset");
+    }
+}
+```
+
+The method will appear as a button at the bottom of the Inspector. Clicking it will invoke the method on the selected object.
+
+> ⚠️ Only parameterless methods are supported.
+
+---
+
+### `[ShowInInspector]` Attribute
+
+The `ShowInInspector` attribute allows you to **display non-serialized fields and properties** in the Unity Inspector.
+This is useful for runtime debugging, live state inspection, and editor tooling without polluting serialized data.
+
+**Features**
+
+* Shows private & non-serialized fields
+* Supports properties (get / set)
+* Optional read-only mode
+* Live updates during Play Mode
+* Undo support
+
+#### Supported Types
+
+* `int`
+* `float`
+* `bool`
+* `string`
+* `enum`
+* `Vector2`
+* `Vector3`
+
+#### Usage – Field
+
+```csharp
+using UnityEngine;
+
+public class Example : MonoBehaviour
+{
+    [ShowInInspector]
+    private int runtimeCounter;
+
+    private void Update()
+    {
+        runtimeCounter++;
+    }
+}
+```
+
+#### Usage – Property
+
+```csharp
+public class Example : MonoBehaviour
+{
+    [ShowInInspector(ReadOnly = true)]
+    public float Health => 100f;
+}
+```
+
+#### Read-Only Mode
+
+```csharp
+[ShowInInspector(ReadOnly = true)]
+private Vector3 currentVelocity;
+```
+
+---
+
+### Notes & Limitations
+
+* Values shown with `[ShowInInspector]` are **not serialized** and will not persist after domain reload.
+* Intended for **debugging and tooling**, not data storage.
+* Lists, arrays, and complex structs are not drawn by default (can be extended).
+
+---

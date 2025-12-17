@@ -1,7 +1,9 @@
 {
     "name": "DeusaldUnityToolsEditor",
     "rootNamespace": "DeusaldUnityTools",
-    "references": [],
+    "references": [
+        "GUID:65dcb64548388514aaee567ae8e0b9fc"
+    ],
     "includePlatforms": [
         "Editor"
     ],
