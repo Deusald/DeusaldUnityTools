@@ -94,7 +94,7 @@ namespace DeusaldUnityTools
     }
 
     [PublicAPI]
-    public abstract class Tween<TComponent, TData> : Tween where TComponent : Component
+    public abstract class Tween<TComponent, TData> : Tween where TComponent : class
     {
         /// <summary>The "From" value defines the starting value of the Tween. When the "From" value is not set, the Tween will use the current value of the property.</summary>
         public TData? From { get; set; }
@@ -139,6 +139,12 @@ namespace DeusaldUnityTools
         protected abstract TData Lerp(TData from, TData to, float time);
         protected abstract void  ApplyToComponent(TData value);
 
+        private bool IsComponentMissing()
+        {
+            // Unity Objects overload == to detect destroyed instances, plain classes (e.g. VisualElement) use reference null check.
+            return Component is UnityEngine.Object unityObject ? unityObject == null : Component == null;
+        }
+
         internal override void Start()
         {
             Duration         = Duration > 0 ? Duration : 0.00001f;
@@ -164,7 +170,7 @@ namespace DeusaldUnityTools
 
         internal override void Update()
         {
-            if (_WithComponent && Component == null)
+            if (_WithComponent && IsComponentMissing())
             {
                 Cancel();
                 return;
@@ -242,7 +248,7 @@ namespace DeusaldUnityTools
         /// <summary>The cancel method will cancel the Tween. When the Tween is cancelled, the OnCancel and OnFinally delegates will be invoked.</summary>
         public override void Cancel()
         {
-            if (!_WithComponent || !DontInvokeWhenDestroyed || Component != null)
+            if (!_WithComponent || !DontInvokeWhenDestroyed || !IsComponentMissing())
             {
                 OnCancel?.Invoke(this);
                 OnFinally?.Invoke(this);
