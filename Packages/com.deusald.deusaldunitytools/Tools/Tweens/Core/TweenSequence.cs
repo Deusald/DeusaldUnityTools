@@ -117,7 +117,7 @@ namespace DeusaldUnityTools
             foreach (Tween tween in _AllInsertedTweens) tween.Cancel();
         }
         
-        /// <summary>The cancel method will cancel the Tween. When the Tween is canceled, the OnCancel and OnFinally delegates will be invoked.</summary>
+        /// <summary>The await decommission method will return an enumerator that will await the decommission of the Tween Sequence. This can be used in coroutines to wait for the Tween Sequence to finish or be canceled.</summary>
         public IEnumerator AwaitDecommission()
         {
             while (!IsDecommissioned) yield return null;
@@ -126,7 +126,7 @@ namespace DeusaldUnityTools
         /// <summary>The await decommission async method will return an awaitable that will await the decommission of the Tween. This can be used in async methods to wait for the Tween to finish or be canceled.</summary>
         public async Awaitable AwaitDecommissionAsync()
         {
-            while (!IsDecommissioned) await Awaitable.EndOfFrameAsync();
+            while (!IsDecommissioned) await Awaitable.NextFrameAsync();
         }
     }
 }
