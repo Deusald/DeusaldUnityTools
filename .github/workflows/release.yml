@@ -42,7 +42,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Check secrets
         run: |
@@ -113,14 +113,14 @@ jobs:
       UPM_CLI_VERSION:                v10.0.0
       PACKAGE_DIR:                    ${{ matrix.package }}
       VERSION:                        ${{ needs.prepare.outputs.version }}
-      WORK_DIR:                       .upm-work
-      DIST_DIR:                       .upm-dist
+      WORK_DIR:                       upm-work
+      DIST_DIR:                       upm-dist
       PACK_TIMEOUT:                   180s
       PACK_ATTEMPTS:                  3
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install Unity UPM CLI
         run: |
@@ -179,10 +179,10 @@ jobs:
           echo "Signed $name-$VERSION.tgz"
 
       - name: Upload signed package
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name:              signed-${{ env.PACKAGE_NAME }}
-          path:              .upm-dist/*.tgz
+          path:              upm-dist/*.tgz
           if-no-files-found: error
           retention-days:    1
 
@@ -196,17 +196,17 @@ jobs:
 
     steps:
       - name: Download signed packages
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern:        signed-*
-          path:           .upm-dist
+          path:           upm-dist
           merge-multiple: true
 
       - name: Check signed packages
         run: |
           shopt -s nullglob
-          archives=(.upm-dist/*.tgz)
-          ls -l .upm-dist
+          archives=(upm-dist/*.tgz)
+          ls -l upm-dist
           if [ "${#archives[@]}" -ne "$EXPECTED_PACKAGES" ]; then
             echo "::error::Collected ${#archives[@]} signed packages, expected $EXPECTED_PACKAGES"
             exit 1
@@ -214,18 +214,18 @@ jobs:
 
       - name: Upload signed packages (dry run)
         if: github.event_name != 'push'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name:              signed-packages-${{ env.VERSION }}
-          path:              .upm-dist/*.tgz
+          path:              upm-dist/*.tgz
           if-no-files-found: error
           retention-days:    7
 
       - name: Create GitHub Release
         if: github.event_name == 'push'
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           name:                    ${{ github.ref_name }}
           generate_release_notes:  true
           fail_on_unmatched_files: true
-          files:                   .upm-dist/*.tgz
+          files:                   upm-dist/*.tgz
