@@ -44,9 +44,11 @@ namespace DeusaldUnityTools
                 _Pools.Add(prefab, pool);
             }
 
-            for (int i = 0; i < count - pool.Count; i++)
+            int missingCount = count - pool.Count;
+
+            for (int x = 0; x < missingCount; ++x)
             {
-                Component pooledObject = InnerInstantiate(prefab, transform).GetComponent<T>();
+                Component pooledObject = InnerInstantiate(prefab.gameObject, transform).GetComponent<T>();
                 pooledObject.gameObject.SetActive(false);
                 pool.Enqueue(pooledObject);
             }

@@ -1,12 +1,8 @@
 {
-    "name": "DeusaldUnityToolsEditor",
+    "name": "DeusaldUnityTools.Pooling",
     "rootNamespace": "DeusaldUnityTools",
-    "references": [
-        "GUID:65dcb64548388514aaee567ae8e0b9fc"
-    ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "references": [],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

@@ -1,0 +1,17 @@
+{
+  "name": "com.deusald.deusaldunitytools.sceneautoloader",
+  "displayName": "Deusald Unity Tools - Scene Autoloader",
+  "version": "4.0.0",
+  "description": "Editor tool that always loads a chosen master scene when entering Play Mode.",
+  "documentationUrl": "https://github.com/Deusald/DeusaldUnityTools",
+  "changelogUrl": "https://github.com/Deusald/DeusaldUnityTools",
+  "licensesUrl": "https://github.com/Deusald/DeusaldUnityTools",
+  "dependencies": {
+  },
+  "author": {
+    "name": "Adam Deusald Orlinski",
+    "email": "deusald@gmail.com",
+    "url": "https://www.deusald.com"
+  },
+  "keywords": ["Tools", "Editor", "Scene"]
+}

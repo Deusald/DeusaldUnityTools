@@ -1,0 +1,14 @@
+{
+    "name": "DeusaldUnityTools.Inspector.Editor",
+    "rootNamespace": "DeusaldUnityTools",
+    "references": ["GUID:e909df749a9ca9334caf009000a22b59"],
+    "includePlatforms": ["Editor"],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,20 @@
+{
+  "name": "com.deusald.deusaldunitytools.tweens",
+  "displayName": "Deusald Unity Tools - Tweens",
+  "version": "4.0.0",
+  "description": "Lightweight, strictly typed tweening engine for Transforms, UI, UI Toolkit, lights, audio and sprites.",
+  "documentationUrl": "https://github.com/Deusald/DeusaldUnityTools",
+  "changelogUrl": "https://github.com/Deusald/DeusaldUnityTools",
+  "licensesUrl": "https://github.com/Deusald/DeusaldUnityTools",
+  "dependencies": {
+    "com.unity.ugui": "2.0.0",
+    "com.unity.modules.audio": "1.0.0",
+    "com.unity.modules.uielements": "1.0.0"
+  },
+  "author": {
+    "name": "Adam Deusald Orlinski",
+    "email": "deusald@gmail.com",
+    "url": "https://www.deusald.com"
+  },
+  "keywords": ["Tools", "Tweens", "Animation"]
+}

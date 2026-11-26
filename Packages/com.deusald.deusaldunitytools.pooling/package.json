@@ -1,0 +1,17 @@
+{
+  "name": "com.deusald.deusaldunitytools.pooling",
+  "displayName": "Deusald Unity Tools - Pooling",
+  "version": "4.0.0",
+  "description": "Simple GameObject pooling system.",
+  "documentationUrl": "https://github.com/Deusald/DeusaldUnityTools",
+  "changelogUrl": "https://github.com/Deusald/DeusaldUnityTools",
+  "licensesUrl": "https://github.com/Deusald/DeusaldUnityTools",
+  "dependencies": {
+  },
+  "author": {
+    "name": "Adam Deusald Orlinski",
+    "email": "deusald@gmail.com",
+    "url": "https://www.deusald.com"
+  },
+  "keywords": ["Tools", "Pooling"]
+}

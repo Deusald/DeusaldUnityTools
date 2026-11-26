@@ -1,0 +1,17 @@
+{
+  "name": "com.deusald.deusaldunitytools.secureplayerprefs",
+  "displayName": "Deusald Unity Tools - Secure Player Prefs",
+  "version": "4.0.0",
+  "description": "Encrypted PlayerPrefs.",
+  "documentationUrl": "https://github.com/Deusald/DeusaldUnityTools",
+  "changelogUrl": "https://github.com/Deusald/DeusaldUnityTools",
+  "licensesUrl": "https://github.com/Deusald/DeusaldUnityTools",
+  "dependencies": {
+  },
+  "author": {
+    "name": "Adam Deusald Orlinski",
+    "email": "deusald@gmail.com",
+    "url": "https://www.deusald.com"
+  },
+  "keywords": ["Tools", "PlayerPrefs", "Encryption"]
+}

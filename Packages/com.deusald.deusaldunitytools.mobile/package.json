@@ -1,0 +1,18 @@
+{
+  "name": "com.deusald.deusaldunitytools.mobile",
+  "displayName": "Deusald Unity Tools - Mobile",
+  "version": "4.0.0",
+  "description": "Native Android and iOS tools: share, store pages, app settings, haptics and Game Center auth.",
+  "documentationUrl": "https://github.com/Deusald/DeusaldUnityTools",
+  "changelogUrl": "https://github.com/Deusald/DeusaldUnityTools",
+  "licensesUrl": "https://github.com/Deusald/DeusaldUnityTools",
+  "dependencies": {
+    "com.unity.modules.androidjni": "1.0.0"
+  },
+  "author": {
+    "name": "Adam Deusald Orlinski",
+    "email": "deusald@gmail.com",
+    "url": "https://www.deusald.com"
+  },
+  "keywords": ["Tools", "Mobile", "Android", "iOS", "Haptic"]
+}
