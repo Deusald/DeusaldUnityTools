@@ -24,6 +24,8 @@
 !.gitignore
 !.gitattributes
 !.gitmodules
+!.github
+!.github/**
 
 # Documents (Docs)
 ![dD]ocs
