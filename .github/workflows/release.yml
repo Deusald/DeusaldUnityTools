@@ -7,6 +7,8 @@ name: Sign and release packages
 # Dry run: Actions > Sign and release packages > Run workflow. Signs the packages of the chosen
 # branch with the version from their package.json and uploads them as a workflow artifact only.
 # It creates no release and no tag.
+#
+# Jobs: prepare (checks, package list) -> sign (one parallel job per package) -> publish.
 
 on:
   push:
@@ -21,19 +23,22 @@ concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false
 
+env:
+  PACKAGES_GLOB:     Packages/com.deusald.deusaldunitytools*
+  EXPECTED_PACKAGES: 9
+
 jobs:
-  release:
-    name: ${{ github.event_name == 'push' && 'Sign and release' || 'Sign (dry run)' }}
+  prepare:
+    name: Validate
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      version:  ${{ steps.validate.outputs.version }}
+      packages: ${{ steps.validate.outputs.packages }}
     env:
       UPM_SERVICE_ACCOUNT_KEY_ID:     ${{ secrets.UPM_SERVICE_ACCOUNT_KEY_ID }}
       UPM_SERVICE_ACCOUNT_KEY_SECRET: ${{ secrets.UPM_SERVICE_ACCOUNT_KEY_SECRET }}
       UPM_ORG_ID:                     ${{ secrets.UPM_ORG_ID }}
-      UPM_CLI_VERSION:                v10.0.0
-      PACKAGES_GLOB:                  Packages/com.deusald.deusaldunitytools*
-      EXPECTED_PACKAGES:              9
-      WORK_DIR:                       .upm-work
-      DIST_DIR:                       .upm-dist
 
     steps:
       - name: Check out repository
@@ -49,6 +54,7 @@ jobs:
           done
 
       - name: Validate package versions
+        id: validate
         run: |
           if [ "$GITHUB_EVENT_NAME" = "push" ]; then
             version="${GITHUB_REF_NAME#v}"
@@ -57,14 +63,15 @@ jobs:
             version="$(jq -r '.version' Packages/com.deusald.deusaldunitytools/package.json)"
             source="meta-package"
           fi
-          echo "VERSION=$version" >> "$GITHUB_ENV"
           echo "Version: $version (from $source)"
 
           count=0
           failed=0
+          packages=()
           for dir in $PACKAGES_GLOB; do
             [ -f "$dir/package.json" ] || continue
             count=$((count + 1))
+            packages+=("$dir")
             name="$(jq -r '.name' "$dir/package.json")"
             pkg_version="$(jq -r '.version' "$dir/package.json")"
             if [ "$pkg_version" != "$version" ]; then
@@ -85,7 +92,35 @@ jobs:
             echo "::error::Found $count packages, expected $EXPECTED_PACKAGES (update EXPECTED_PACKAGES when adding a module)"
             failed=1
           fi
-          exit $failed
+          [ "$failed" -eq 0 ] || exit 1
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "packages=$(printf '%s\n' "${packages[@]}" | jq -R . | jq -cs .)" >> "$GITHUB_OUTPUT"
+
+  sign:
+    name: Sign ${{ matrix.package }}
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: true
+      matrix:
+        package: ${{ fromJSON(needs.prepare.outputs.packages) }}
+    env:
+      UPM_SERVICE_ACCOUNT_KEY_ID:     ${{ secrets.UPM_SERVICE_ACCOUNT_KEY_ID }}
+      UPM_SERVICE_ACCOUNT_KEY_SECRET: ${{ secrets.UPM_SERVICE_ACCOUNT_KEY_SECRET }}
+      UPM_ORG_ID:                     ${{ secrets.UPM_ORG_ID }}
+      UPM_CLI_VERSION:                v10.0.0
+      PACKAGE_DIR:                    ${{ matrix.package }}
+      VERSION:                        ${{ needs.prepare.outputs.version }}
+      WORK_DIR:                       .upm-work
+      DIST_DIR:                       .upm-dist
+      PACK_TIMEOUT:                   180s
+      PACK_ATTEMPTS:                  3
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
 
       - name: Install Unity UPM CLI
         run: |
@@ -93,51 +128,89 @@ jobs:
           bash "$RUNNER_TEMP/upm-install.sh" "$UPM_CLI_VERSION"
           echo "$HOME/.upm/bin" >> "$GITHUB_PATH"
 
-      - name: Pack and sign packages
+      - name: Pack and sign
         run: |
           mkdir -p "$WORK_DIR" "$DIST_DIR"
           upm --version
+          name="$(jq -r '.name' "$PACKAGE_DIR/package.json")"
+          echo "PACKAGE_NAME=$name" >> "$GITHUB_ENV"
 
-          for dir in $PACKAGES_GLOB; do
-            [ -f "$dir/package.json" ] || continue
-            name="$(jq -r '.name' "$dir/package.json")"
-            out="$WORK_DIR/$name"
-
-            echo "::group::$name"
-            upm pack "$dir" --organization-id "$UPM_ORG_ID" --destination "$out"
-
-            shopt -s nullglob
-            archives=("$out"/*.tgz "$out"/*.tar.gz)
-            shopt -u nullglob
-            if [ "${#archives[@]}" -ne 1 ]; then
-              echo "::error::Expected one archive for $name, found ${#archives[@]}"
+          # upm pack has no timeout of its own and a signing call can hang: cap each attempt and retry.
+          attempt=1
+          until timeout --kill-after=10s "$PACK_TIMEOUT" upm pack "$PACKAGE_DIR" --organization-id "$UPM_ORG_ID" --destination "$WORK_DIR"; do
+            code=$?
+            if [ "$attempt" -ge "$PACK_ATTEMPTS" ]; then
+              echo "::error::Signing $name failed after $attempt attempts (last exit code $code)"
               exit 1
             fi
-            archive="${archives[0]}"
-
-            listing="$(tar -tzf "$archive")"
-            if ! grep -qx 'package/package.json' <<< "$listing"; then
-              echo "::error::$name archive has no package/package.json"
-              exit 1
-            fi
-            if ! grep -qx 'package/.attestation.p7m' <<< "$listing"; then
-              echo "::error::$name archive is not signed (no package/.attestation.p7m)"
-              exit 1
-            fi
-
-            packed="$(tar -xOzf "$archive" package/package.json | jq -r '"\(.name)@\(.version)"')"
-            if [ "$packed" != "$name@$VERSION" ]; then
-              echo "::error::Archive contains $packed, expected $name@$VERSION"
-              exit 1
-            fi
-
-            # Stable "<name>-<version>.tgz" names: OpenUPM picks each package's asset by the "<name>-" prefix.
-            mv "$archive" "$DIST_DIR/$name-$VERSION.tgz"
-            echo "Signed $name-$VERSION.tgz"
-            echo "::endgroup::"
+            echo "::warning::Signing $name failed or timed out (exit code $code), retrying ($attempt/$PACK_ATTEMPTS)"
+            rm -rf "$WORK_DIR"
+            attempt=$((attempt + 1))
+            sleep 10
           done
 
-          ls -l "$DIST_DIR"
+          shopt -s nullglob
+          archives=("$WORK_DIR"/*.tgz "$WORK_DIR"/*.tar.gz)
+          shopt -u nullglob
+          if [ "${#archives[@]}" -ne 1 ]; then
+            echo "::error::Expected one archive for $name, found ${#archives[@]}"
+            exit 1
+          fi
+          archive="${archives[0]}"
+
+          listing="$(tar -tzf "$archive")"
+          if ! grep -qx 'package/package.json' <<< "$listing"; then
+            echo "::error::$name archive has no package/package.json"
+            exit 1
+          fi
+          if ! grep -qx 'package/.attestation.p7m' <<< "$listing"; then
+            echo "::error::$name archive is not signed (no package/.attestation.p7m)"
+            exit 1
+          fi
+
+          packed="$(tar -xOzf "$archive" package/package.json | jq -r '"\(.name)@\(.version)"')"
+          if [ "$packed" != "$name@$VERSION" ]; then
+            echo "::error::Archive contains $packed, expected $name@$VERSION"
+            exit 1
+          fi
+
+          # Stable "<name>-<version>.tgz" names: OpenUPM picks each package's asset by the "<name>-" prefix.
+          mv "$archive" "$DIST_DIR/$name-$VERSION.tgz"
+          echo "Signed $name-$VERSION.tgz"
+
+      - name: Upload signed package
+        uses: actions/upload-artifact@v4
+        with:
+          name:              signed-${{ env.PACKAGE_NAME }}
+          path:              .upm-dist/*.tgz
+          if-no-files-found: error
+          retention-days:    1
+
+  publish:
+    name: ${{ github.event_name == 'push' && 'Release' || 'Collect (dry run)' }}
+    needs: [prepare, sign]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      VERSION: ${{ needs.prepare.outputs.version }}
+
+    steps:
+      - name: Download signed packages
+        uses: actions/download-artifact@v4
+        with:
+          pattern:        signed-*
+          path:           .upm-dist
+          merge-multiple: true
+
+      - name: Check signed packages
+        run: |
+          shopt -s nullglob
+          archives=(.upm-dist/*.tgz)
+          ls -l .upm-dist
+          if [ "${#archives[@]}" -ne "$EXPECTED_PACKAGES" ]; then
+            echo "::error::Collected ${#archives[@]} signed packages, expected $EXPECTED_PACKAGES"
+            exit 1
+          fi
 
       - name: Upload signed packages (dry run)
         if: github.event_name != 'push'
@@ -152,7 +225,7 @@ jobs:
         if: github.event_name == 'push'
         uses: softprops/action-gh-release@v2
         with:
-          name:                   ${{ github.ref_name }}
-          generate_release_notes: true
+          name:                    ${{ github.ref_name }}
+          generate_release_notes:  true
           fail_on_unmatched_files: true
-          files:                  .upm-dist/*.tgz
+          files:                   .upm-dist/*.tgz
