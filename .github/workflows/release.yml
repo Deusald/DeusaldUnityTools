@@ -124,9 +124,18 @@ jobs:
 
       - name: Install Unity UPM CLI
         run: |
-          curl -fsSL https://cdn.packages.unity.com/upm-cli/install.sh -o "$RUNNER_TEMP/upm-install.sh"
-          bash "$RUNNER_TEMP/upm-install.sh" "$UPM_CLI_VERSION"
-          echo "$HOME/.upm/bin" >> "$GITHUB_PATH"
+          # The CDN occasionally cuts the CLI download short: retry the whole install.
+          for attempt in 1 2 3 4; do
+            if curl -fsSL --retry 3 --retry-all-errors https://cdn.packages.unity.com/upm-cli/install.sh -o "$RUNNER_TEMP/upm-install.sh" \
+              && bash "$RUNNER_TEMP/upm-install.sh" "$UPM_CLI_VERSION"; then
+              echo "$HOME/.upm/bin" >> "$GITHUB_PATH"
+              exit 0
+            fi
+            echo "::warning::Installing UPM CLI failed (attempt $attempt/4), retrying"
+            sleep $((attempt * 10))
+          done
+          echo "::error::Installing UPM CLI failed after 4 attempts"
+          exit 1
 
       - name: Pack and sign
         run: |
@@ -187,7 +196,7 @@ jobs:
           retention-days:    1
 
   publish:
-    name: ${{ github.event_name == 'push' && 'Release' || 'Collect (dry run)' }}
+    name: Publish
     needs: [prepare, sign]
     runs-on: ubuntu-latest
     timeout-minutes: 10
