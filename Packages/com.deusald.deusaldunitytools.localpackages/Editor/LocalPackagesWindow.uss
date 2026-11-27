@@ -1,0 +1,177 @@
+.lp-root {
+    flex-grow: 1;
+}
+
+.lp-hidden {
+    display: none;
+}
+
+.lp-toolbar-spacer {
+    flex-grow: 1;
+}
+
+.lp-toolbar-label {
+    -unity-text-align: middle-right;
+    margin-right: 6px;
+    opacity: 0.7;
+}
+
+.lp-split {
+    flex-grow: 1;
+}
+
+.lp-list-pane {
+    min-width: 200px;
+    border-right-width: 1px;
+    border-right-color: rgba(0, 0, 0, 0.35);
+}
+
+.lp-list {
+    flex-grow: 1;
+}
+
+.lp-list-footer {
+    flex-direction: row;
+    align-items: center;
+    padding: 2px 4px;
+    border-top-width: 1px;
+    border-top-color: rgba(0, 0, 0, 0.35);
+}
+
+.lp-summary {
+    flex-grow: 1;
+    opacity: 0.7;
+}
+
+.lp-add-button {
+    width: 24px;
+    -unity-font-style: bold;
+}
+
+.lp-item {
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 8px;
+}
+
+.lp-item-texts {
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow: hidden;
+    margin-right: 6px;
+}
+
+.lp-item-name {
+    -unity-font-style: bold;
+    text-overflow: ellipsis;
+}
+
+.lp-item-version {
+    font-size: 11px;
+    opacity: 0.7;
+    text-overflow: ellipsis;
+}
+
+.lp-badge {
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-size: 10px;
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+    background-color: rgba(128, 128, 128, 0.6);
+}
+
+.lp-status-ok {
+    background-color: rgb(56, 142, 60);
+}
+
+.lp-status-update {
+    background-color: rgb(214, 115, 0);
+}
+
+.lp-status-error {
+    background-color: rgb(198, 40, 40);
+}
+
+.lp-status-checking {
+    background-color: rgb(30, 110, 190);
+}
+
+.lp-details-pane {
+    flex-grow: 1;
+}
+
+.lp-details {
+    padding: 12px;
+}
+
+.lp-empty {
+    padding: 16px;
+    white-space: normal;
+    opacity: 0.6;
+}
+
+.lp-title {
+    font-size: 18px;
+    -unity-font-style: bold;
+    white-space: normal;
+}
+
+.lp-subtitle {
+    margin-bottom: 6px;
+    opacity: 0.7;
+}
+
+.lp-badges {
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+
+.lp-badges > .lp-badge {
+    margin-right: 4px;
+}
+
+.lp-section-title {
+    margin-top: 12px;
+    margin-bottom: 4px;
+    -unity-font-style: bold;
+}
+
+.lp-row {
+    flex-direction: row;
+    margin-bottom: 2px;
+}
+
+.lp-row-label {
+    width: 110px;
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.lp-row-value {
+    flex-shrink: 1;
+    white-space: normal;
+}
+
+.lp-help {
+    margin-bottom: 8px;
+    white-space: normal;
+    opacity: 0.7;
+}
+
+.lp-error {
+    margin: 4px 3px;
+    white-space: normal;
+    color: rgb(235, 87, 87);
+}
+
+.lp-buttons {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.lp-buttons > Button {
+    margin: 2px;
+}

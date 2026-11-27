@@ -5,14 +5,15 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.deusald.deusaldunitytools.extensions": "4.0.0",
-        "com.deusald.deusaldunitytools.fpscounter": "4.0.0",
-        "com.deusald.deusaldunitytools.inspector": "4.0.0",
-        "com.deusald.deusaldunitytools.mobile": "4.0.0",
-        "com.deusald.deusaldunitytools.pooling": "4.0.0",
-        "com.deusald.deusaldunitytools.sceneautoloader": "4.0.0",
-        "com.deusald.deusaldunitytools.secureplayerprefs": "4.0.0",
-        "com.deusald.deusaldunitytools.tweens": "4.0.0"
+        "com.deusald.deusaldunitytools.extensions": "4.0.1",
+        "com.deusald.deusaldunitytools.fpscounter": "4.0.1",
+        "com.deusald.deusaldunitytools.inspector": "4.0.1",
+        "com.deusald.deusaldunitytools.localpackages": "4.0.1",
+        "com.deusald.deusaldunitytools.mobile": "4.0.1",
+        "com.deusald.deusaldunitytools.pooling": "4.0.1",
+        "com.deusald.deusaldunitytools.sceneautoloader": "4.0.1",
+        "com.deusald.deusaldunitytools.secureplayerprefs": "4.0.1",
+        "com.deusald.deusaldunitytools.tweens": "4.0.1"
       }
     },
     "com.deusald.deusaldunitytools.extensions": {
@@ -31,6 +32,12 @@
     },
     "com.deusald.deusaldunitytools.inspector": {
       "version": "file:com.deusald.deusaldunitytools.inspector",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.deusald.deusaldunitytools.localpackages": {
+      "version": "file:com.deusald.deusaldunitytools.localpackages",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}

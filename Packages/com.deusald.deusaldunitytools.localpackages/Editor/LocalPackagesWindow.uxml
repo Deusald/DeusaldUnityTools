@@ -1,0 +1,100 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:Style src="LocalPackagesWindow.uss" />
+    <ui:VisualElement name="root" class="lp-root">
+        <uie:Toolbar>
+            <uie:ToolbarButton name="refreshButton" text="Refresh" tooltip="Rescan the Packages folder." />
+            <uie:ToolbarButton name="checkAllButton" text="Check for Updates" tooltip="Ask the Asset Store and OpenUPM for the newest version of every local package." />
+            <ui:VisualElement class="lp-toolbar-spacer" />
+            <ui:Label name="lastCheckedLabel" class="lp-toolbar-label" />
+        </uie:Toolbar>
+        <ui:TwoPaneSplitView fixed-pane-initial-dimension="280" class="lp-split">
+            <ui:VisualElement class="lp-list-pane">
+                <ui:ListView name="packageList" fixed-item-height="40" class="lp-list" />
+                <ui:VisualElement class="lp-list-footer">
+                    <ui:Label name="summaryLabel" class="lp-summary" />
+                    <ui:Button name="addButton" text="+" tooltip="Mark a package in the Packages folder as a local package." class="lp-add-button" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:ScrollView class="lp-details-pane">
+                <ui:Label name="emptyLabel" class="lp-empty" />
+                <ui:VisualElement name="detailsPanel" class="lp-details">
+                    <ui:Label name="displayNameLabel" class="lp-title" />
+                    <ui:Label name="packageNameLabel" class="lp-subtitle" />
+                    <ui:VisualElement class="lp-badges">
+                        <ui:Label name="sourceTypeLabel" class="lp-badge" />
+                        <ui:Label name="statusLabel" class="lp-badge" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="lp-row">
+                        <ui:Label text="Folder" class="lp-row-label" />
+                        <ui:Label name="folderValue" class="lp-row-value" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="lp-row">
+                        <ui:Label text="Installed" class="lp-row-label" />
+                        <ui:Label name="installedValue" class="lp-row-value" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="lp-row">
+                        <ui:Label text="Latest" class="lp-row-label" />
+                        <ui:Label name="latestValue" class="lp-row-value" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="lp-row">
+                        <ui:Label text="Published" class="lp-row-label" />
+                        <ui:Label name="publishedValue" class="lp-row-value" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="lp-row">
+                        <ui:Label text="Last checked" class="lp-row-label" />
+                        <ui:Label name="checkedValue" class="lp-row-value" />
+                    </ui:VisualElement>
+                    <ui:Label name="checkErrorLabel" class="lp-error" />
+                    <ui:Label name="installLatestStatusLabel" class="lp-help" />
+                    <ui:Label name="installLatestErrorLabel" class="lp-error" />
+                    <ui:VisualElement class="lp-buttons">
+                        <ui:Button name="installLatestButton" text="Install Latest" tooltip="Download the latest version from OpenUPM and replace the package files with it. The marker settings are kept." />
+                        <ui:Button name="checkButton" text="Check for Update" />
+                        <ui:Button name="openSourceButton" text="Open Source Page" />
+                        <ui:Button name="showFolderButton" text="Show in Explorer" />
+                    </ui:VisualElement>
+                    <ui:Label text="Marker" class="lp-section-title" />
+                    <ui:TextField name="sourceField" label="Source" tooltip="Asset Store page or OpenUPM package URL." />
+                    <ui:TextField name="versionField" label="Installed Version" tooltip="Upstream version kept in the folder. Leave empty to use the package.json version." />
+                    <ui:Label name="markerErrorLabel" class="lp-error" />
+                    <ui:VisualElement class="lp-buttons">
+                        <ui:Button name="saveButton" text="Save" />
+                        <ui:Button name="markUpdatedButton" text="Mark as Updated" tooltip="Set the installed version to the latest one: in the marker, or in package.json (as a 3 part version) when the marker has no version. Use it after replacing the package files with the new version." />
+                        <ui:Button name="removeButton" text="Remove Marker" tooltip="Delete the marker file. The package itself stays in place." />
+                    </ui:VisualElement>
+                    <ui:Label text="Compiler Warnings" class="lp-section-title" />
+                    <ui:Toggle name="silenceToggle" label="Silence Warnings" tooltip="Writes a csc.rsp with -warn:0 next to every assembly definition of the package, so its compiler warnings are hidden." />
+                    <ui:Label name="silenceStatusLabel" class="lp-help" />
+                    <ui:Label name="silenceErrorLabel" class="lp-error" />
+                    <ui:VisualElement name="reapplySilenceRow" class="lp-buttons">
+                        <ui:Button name="reapplySilenceButton" text="Reapply" tooltip="Write the missing csc.rsp files again, e.g. after replacing the package files." />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="addPanel" class="lp-details">
+                    <ui:Label text="Add Local Package" class="lp-title" />
+                    <ui:Label text="Install from OpenUPM" class="lp-section-title" />
+                    <ui:Label text="Downloads the package from OpenUPM into the Packages folder and marks it as a local package, together with its OpenUPM dependencies. No scoped registry or account is needed." class="lp-help" />
+                    <ui:TextField name="installNameField" label="Package" tooltip="Package name, e.g. com.cysharp.unitask, or its OpenUPM page URL." />
+                    <ui:TextField name="installVersionField" label="Version" tooltip="Version to install. Leave empty for the latest one." />
+                    <ui:Toggle name="installSilenceToggle" label="Silence Warnings" tooltip="Writes a csc.rsp with -warn:0 next to every assembly definition of the installed packages, so their compiler warnings are hidden." />
+                    <ui:Label name="installErrorLabel" class="lp-error" />
+                    <ui:Label name="installStatusLabel" class="lp-help" />
+                    <ui:VisualElement class="lp-buttons">
+                        <ui:Button name="installButton" text="Install" />
+                    </ui:VisualElement>
+                    <ui:Label text="Mark a Package Already in the Packages Folder" class="lp-section-title" />
+                    <ui:Label text="For a package you put into the Packages folder yourself (with a package.json), e.g. from the Asset Store: pick it and set where it comes from. A localpackage.json marker file is written into its folder." class="lp-help" />
+                    <ui:DropdownField name="addPackageField" label="Package" />
+                    <ui:TextField name="addSourceField" label="Source" tooltip="Asset Store page or OpenUPM package URL." />
+                    <ui:TextField name="addVersionField" label="Installed Version" tooltip="Upstream version kept in the folder. Leave empty to use the package.json version." />
+                    <ui:Toggle name="addSilenceToggle" label="Silence Warnings" tooltip="Writes a csc.rsp with -warn:0 next to every assembly definition of the package, so its compiler warnings are hidden." />
+                    <ui:Label name="addErrorLabel" class="lp-error" />
+                    <ui:VisualElement class="lp-buttons">
+                        <ui:Button name="addConfirmButton" text="Add" />
+                        <ui:Button name="addCancelButton" text="Cancel" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:ScrollView>
+        </ui:TwoPaneSplitView>
+    </ui:VisualElement>
+</ui:UXML>

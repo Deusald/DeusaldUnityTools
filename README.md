@@ -17,6 +17,7 @@ single `DeusaldUnityTools` namespace.
 - [Fps Counter](#fps-counter)
 - [Inspector](#inspector)
 - [Scene Autoloader](#scene-autoloader)
+- [Local Packages](#local-packages)
 - [Upgrading to 4.0](#upgrading-to-40)
 - [Native Swift/Java projects](#native-swiftjava-projects)
 
@@ -81,6 +82,7 @@ depends on is added too, or resolves from the OpenUPM registry. With git URLs, a
 | `com.deusald.deusaldunitytools.fpscounter`        | `DeusaldUnityTools.FpsCounter`              | [Fps Counter](#fps-counter)                                               |
 | `com.deusald.deusaldunitytools.inspector`         | `DeusaldUnityTools.Inspector` (+ `.Editor`) | [`[Button]` and `[ShowInInspector]`](#inspector)                          |
 | `com.deusald.deusaldunitytools.sceneautoloader`   | `DeusaldUnityTools.SceneAutoLoader.Editor`  | [Scene Autoloader](#scene-autoloader) (editor only)                       |
+| `com.deusald.deusaldunitytools.localpackages`     | `DeusaldUnityTools.LocalPackages.Editor`    | [Local Packages](#local-packages) (editor only)                           |
 
 The assemblies are auto-referenced, so code in `Assembly-CSharp` sees them without any setup. If your code lives in
 your own assembly definition, add the assemblies of the modules you use to its references.
@@ -574,6 +576,62 @@ SceneAutoLoader.SetManually("Assets/Scenes/Master.unity", loadMasterOnPlay: true
 ```
 
 ![scene-autoloader-screenshot](images/scene-autoloader.png)
+
+---
+
+## Local Packages
+
+`com.deusald.deusaldunitytools.localpackages` · editor only
+
+Keeps Asset Store and OpenUPM packages as embedded packages inside the project's `Packages` folder instead of
+installing them from a registry. They are committed with the project, so nobody needs an Asset Store or registry
+account to open it, and Unity shows no unsigned package warnings for them. This module tracks where each one came
+from and tells you when a newer version is out.
+
+A package becomes a local package when its folder holds a `localpackage.json` marker file:
+
+```json
+{
+    "source": "https://assetstore.unity.com/packages/tools/utilities/editor-console-pro-11889",
+    "version": "",
+    "silenceWarnings": true
+}
+```
+
+- **`source`**: the Asset Store page (it must end with the product id, `-11889`) or the OpenUPM package page
+  (`https://openupm.com/packages/com.vendor.package/`).
+- **`version`**: the upstream version kept in the folder. Leave it empty to use the `package.json` version. Versions
+  are compared part by part with missing parts counting as 0, so a `package.json` version of `3.984.0` matches the
+  Asset Store's `3.984`.
+- **`silenceWarnings`**: hides the package's compiler warnings (see below).
+
+Open **Tools > Local Packages** to see every local package with its installed and latest version:
+
+- **+** adds a local package, in one of two ways:
+  - **Install from OpenUPM** downloads a package (name or OpenUPM URL, latest or a chosen version) into
+    `Packages/<name>` and marks it. Its dependencies are installed the same way, except `com.unity.*` ones and those
+    already in the `Packages` folder; dependencies OpenUPM doesn't have are listed in the Console. No scoped
+    registry or account is needed.
+  - **Mark a package already in the `Packages` folder**, e.g. one you made from an Asset Store asset.
+- **Install Latest** (OpenUPM packages with an update) replaces the package files with the latest version and keeps
+  the marker settings. The old folder is moved away as a whole first, so if a file is in use (a loaded native
+  plugin, for example) nothing is changed.
+- **Check for Updates** asks every source for its newest version. Packages are also checked when the window opens if
+  their last check is older than a day. Results are cached in `Library/DeusaldUnityTools/LocalPackagesCache.json`.
+- **Mark as Updated** sets the installed version to the latest one after you have replaced the package files. When
+  the marker has no version, it writes it into `package.json` as a 3 part version (`3.985` becomes `3.985.0`).
+- **Silence Warnings** writes a `csc.rsp` with `-warn:0` next to every assembly definition of the package, which
+  hides that assembly's compiler warnings. Options already in an existing `csc.rsp` are kept. If the files go
+  missing, for example after replacing the package with a new version, the window says so and **Reapply** writes
+  them again; **Mark as Updated** does that too.
+
+OpenUPM is queried through its registry API. The Asset Store has no public API, so its product page is read instead:
+it works without signing in, but it can break if Unity changes the page.
+
+An Asset Store asset has to be made into a package before it can live in `Packages`: move its folder there, add a
+`package.json` and give its scripts assembly definitions (scripts outside an assembly definition are not compiled in
+packages, and `Editor` folders have no special meaning there). Asset Store content is licensed per seat, so keep
+such a project in a private repository.
 
 ---
 

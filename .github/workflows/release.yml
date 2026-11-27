@@ -25,7 +25,7 @@ concurrency:
 
 env:
   PACKAGES_GLOB:     Packages/com.deusald.deusaldunitytools*
-  EXPECTED_PACKAGES: 9
+  EXPECTED_PACKAGES: 10
 
 jobs:
   prepare:
