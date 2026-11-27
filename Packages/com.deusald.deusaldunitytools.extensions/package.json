@@ -1,7 +1,7 @@
 {
   "name": "com.deusald.deusaldunitytools.extensions",
   "displayName": "Deusald Unity Tools - Extensions",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "description": "String, Unity, uGUI and TextMesh Pro extension methods, including TMP text warp.",
   "documentationUrl": "https://github.com/Deusald/DeusaldUnityTools",
   "changelogUrl": "https://github.com/Deusald/DeusaldUnityTools",

@@ -44,8 +44,8 @@ Add the OpenUPM scoped registry for `com.deusald` once, then add the meta-packag
   }
 ],
 "dependencies": {
-  "com.deusald.deusaldunitytools.tweens": "4.0.1",
-  "com.deusald.deusaldunitytools.extensions": "4.0.1"
+  "com.deusald.deusaldunitytools.tweens": "4.1.0",
+  "com.deusald.deusaldunitytools.extensions": "4.1.0"
 }
 ```
 

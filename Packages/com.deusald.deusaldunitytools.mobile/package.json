@@ -1,7 +1,7 @@
 {
   "name": "com.deusald.deusaldunitytools.mobile",
   "displayName": "Deusald Unity Tools - Mobile",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "description": "Native Android and iOS tools: share, store pages, app settings, haptics and Game Center auth.",
   "documentationUrl": "https://github.com/Deusald/DeusaldUnityTools",
   "changelogUrl": "https://github.com/Deusald/DeusaldUnityTools",

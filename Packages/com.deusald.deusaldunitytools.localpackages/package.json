@@ -1,7 +1,7 @@
 {
   "name": "com.deusald.deusaldunitytools.localpackages",
   "displayName": "Deusald Unity Tools - Local Packages",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "unity": "6000.0",
   "description": "Editor tool that tracks Asset Store and OpenUPM packages kept locally in the Packages folder and checks them for updates.",
   "documentationUrl": "https://github.com/Deusald/DeusaldUnityTools",
