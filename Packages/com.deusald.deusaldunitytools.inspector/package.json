@@ -1,7 +1,7 @@
 {
   "name": "com.deusald.deusaldunitytools.inspector",
   "displayName": "Deusald Unity Tools - Inspector",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "[Button] and [ShowInInspector] attributes with an inspector that draws them.",
   "documentationUrl": "https://github.com/Deusald/DeusaldUnityTools",
   "changelogUrl": "https://github.com/Deusald/DeusaldUnityTools",

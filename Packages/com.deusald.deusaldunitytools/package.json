@@ -1,20 +1,20 @@
 {
   "name": "com.deusald.deusaldunitytools",
   "displayName": "Deusald Unity Tools",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Deusald Unity Tools meta-package: installs every Deusald Unity Tools module.",
   "documentationUrl": "https://github.com/Deusald/DeusaldUnityTools",
   "changelogUrl": "https://github.com/Deusald/DeusaldUnityTools",
   "licensesUrl": "https://github.com/Deusald/DeusaldUnityTools",
   "dependencies": {
-    "com.deusald.deusaldunitytools.extensions": "4.0.0",
-    "com.deusald.deusaldunitytools.fpscounter": "4.0.0",
-    "com.deusald.deusaldunitytools.inspector": "4.0.0",
-    "com.deusald.deusaldunitytools.mobile": "4.0.0",
-    "com.deusald.deusaldunitytools.pooling": "4.0.0",
-    "com.deusald.deusaldunitytools.sceneautoloader": "4.0.0",
-    "com.deusald.deusaldunitytools.secureplayerprefs": "4.0.0",
-    "com.deusald.deusaldunitytools.tweens": "4.0.0"
+    "com.deusald.deusaldunitytools.extensions": "4.0.1",
+    "com.deusald.deusaldunitytools.fpscounter": "4.0.1",
+    "com.deusald.deusaldunitytools.inspector": "4.0.1",
+    "com.deusald.deusaldunitytools.mobile": "4.0.1",
+    "com.deusald.deusaldunitytools.pooling": "4.0.1",
+    "com.deusald.deusaldunitytools.sceneautoloader": "4.0.1",
+    "com.deusald.deusaldunitytools.secureplayerprefs": "4.0.1",
+    "com.deusald.deusaldunitytools.tweens": "4.0.1"
   },
   "author": {
     "name": "Adam Deusald Orlinski",

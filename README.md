@@ -29,6 +29,8 @@ everything, or install only the module packages you use.
 
 ### OpenUPM (recommended)
 
+Packages from OpenUPM are signed by Deusald, so the Package Manager shows them as signed (Unity 6.3+) and offers updates.
+
 Add the OpenUPM scoped registry for `com.deusald` once, then add the meta-package or just the modules you use to
 `Packages/manifest.json`:
 
@@ -41,8 +43,8 @@ Add the OpenUPM scoped registry for `com.deusald` once, then add the meta-packag
   }
 ],
 "dependencies": {
-  "com.deusald.deusaldunitytools.tweens": "4.0.0",
-  "com.deusald.deusaldunitytools.extensions": "4.0.0"
+  "com.deusald.deusaldunitytools.tweens": "4.0.1",
+  "com.deusald.deusaldunitytools.extensions": "4.0.1"
 }
 ```
 
